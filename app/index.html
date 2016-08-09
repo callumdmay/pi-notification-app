@@ -5,11 +5,18 @@
     <meta charset="UTF-8">
     <title>Notification Center</title>
     <link rel="stylesheet" type="text/css" href="views/main.css">
+    <link rel="stylesheet" type="text/css" href="views/fonts/roboto.css">
     <script src="js/angular.min.js"></script>
+    <script src="js/jquery-3.1.0.min.js"></script>
+
 </head>
 
 <body>
-    <h1>Hello World!</h1>
+    <div ng-app="clockApp" ng-controller='TimeCtrl' class="region bottom center medium">
+        <p>{{ clock | date:'fullDate'}} {{ clock | date:'mediumTime'}}</p>
+        <p></p>
+    </div>
+    <script src="js/clock.js"></script>
 </body>
 
 </html>
