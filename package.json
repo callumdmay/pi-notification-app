@@ -1,14 +1,14 @@
 {
-  "name": "electron-quick-start",
+  "name": "Pi Notification Center",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
+  "description": "A Notification Center for the Raspberry Pi",
+  "main": "app/js/main.js",
   "scripts": {
     "start": "electron ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron/electron-quick-start.git"
+    "url": "git+https://github.com/callumdmay/pi-notification-center.git"
   },
   "keywords": [
     "Electron",
@@ -16,12 +16,6 @@
     "start",
     "tutorial"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
-  "bugs": {
-    "url": "https://github.com/electron/electron-quick-start/issues"
-  },
-  "homepage": "https://github.com/electron/electron-quick-start#readme",
   "devDependencies": {
     "electron-prebuilt": "^1.2.0"
   }
