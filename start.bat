@@ -1,1 +1,1 @@
-electron .
+npm start
