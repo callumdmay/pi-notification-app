@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Notification Center</title>
     <link rel="stylesheet" type="text/css" href="views/main.css">
+    <link rel="stylesheet" type="text/css" href="views/clock_styles.css">
     <link rel="stylesheet" type="text/css" href="views/fonts/roboto.css">
     <script src="js/angular.min.js"></script>
     <script src="js/jquery-3.1.0.min.js"></script>
@@ -12,9 +13,14 @@
 </head>
 
 <body>
-    <div ng-app="clockApp" ng-controller='TimeCtrl' class="region bottom center medium">
-        <p>{{ clock | date:'fullDate'}} {{ clock | date:'mediumTime'}}</p>
-        <p></p>
+    <div class="clock">
+        <div ng-app="clockApp" ng-controller='TimeCtrl'>
+            <p id="date" class="bold">{{ clock | date:'fullDate'}}</p>
+                <li id="clockNumbers" class="large">{{ clock | date:'h'}}:</li>
+                <li id="clockNumbers" class="large">{{ clock | date:'mm'}}</li>
+                <li id="clockNumbers" class=" medium thin">{{ clock | date:'ss'}}</li>
+                <li id="clockNumbers" class="medium bright">{{ clock | date:'a'}}</li>
+        </div>
     </div>
     <script src="js/clock.js"></script>
 </body>
