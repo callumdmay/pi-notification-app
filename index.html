@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="notificationApp">
+
+<head>
+
+    <title>Notification Center</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="app/views/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="app/views/clock_styles.css">
+    <link rel="stylesheet" type="text/css" href="app/views/weather_styles.css">
+    <link rel="stylesheet" type="text/css" href="app/views/fonts/roboto.css">
+    <script src="app/js/angular.min.js"></script>
+
+</head>
+
+<body style="background: #000;color: #AAA;">
+    <div id="container">
+        <div class="col-sm-6" ng-controller="TimeCtrl">
+            <p id="clockDate">{{ clock | date:'EEEE'}}, {{ clock | date:'MMMM'}} {{ clock | date:'d'}}</p>
+            <span id="clockNumbers">{{ clock | date:'h'}}:{{ clock | date:'mm'}}</span>
+            <ul id="timeList">
+                <li id="clockSeconds">{{ clock | date:'ss'}}</li>
+                <li id="clockPeriod">{{ clock | date:'a'}}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="container">
+        <div class="col-sm-6" ng-controller="weatherController">
+            <span id="weatherCity">{{ currentWeatherData.name }}:</span>
+            <span id="weatherTemperature">{{currentWeatherData.main.temp| number:0}}</span><sup id="weatherSymbol">&#8451</sup>
+            <p id="weatherCondition">Current conditions are {{ currentWeatherData.weather[0].description }}</p>
+        </div>
+    </div>
+
+
+    <script src="app/app.js"></script>
+    <script src="app/js/clock.js"></script>
+    <script src="app/js/weather.js"></script>
+</body>
+
+</html>
