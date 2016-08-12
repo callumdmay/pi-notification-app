@@ -20,8 +20,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6 text-center" ng-controller="TimeCtrl">
-                <div id="clockDate">{{ clock | date:'EEEE'}}, {{ clock | date:'MMMM'}} {{ clock | date:'d'}}</div>
-                <div class="row">
+                <div id="clockDate" class="col-centered">{{ clock | date:'EEEE'}}, {{ clock | date:'MMMM'}} {{ clock | date:'d'}}</div>
+                <div class="row col-centered">
                     <div class="col-sm-7 text-right">
                         <div id="clockNumbers">{{ clock | date:'h'}}:{{ clock | date:'mm'}}</div>
                     </div>
