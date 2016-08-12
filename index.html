@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="app/views/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="app/views/animate.css">
     <link rel="stylesheet" type="text/css" href="app/views/clock_styles.css">
     <link rel="stylesheet" type="text/css" href="app/views/weather_styles.css">
     <link rel="stylesheet" type="text/css" href="app/views/fonts/roboto.css">
@@ -19,13 +18,13 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6 text-center" ng-controller="TimeCtrl">
-                <div id="clockDate" class="col-centered">{{ clock | date:'EEEE'}}, {{ clock | date:'MMMM'}} {{ clock | date:'d'}}</div>
-                <div class="row col-centered">
-                    <div class="col-sm-7 text-right">
-                        <div id="clockNumbers">{{ clock | date:'h'}}:{{ clock | date:'mm'}}</div>
-                    </div>
-                    <div class="col-sm-5 text-left">
+            <div class="col-sm-6" ng-controller="TimeCtrl">
+                <div class="row">
+                    <div id="clockDate" class="text-left">{{ clock | date:'EEEE'}}, {{ clock | date:'MMMM'}} {{ clock | date:'d'}}</div>
+                </div>
+                <div class="row">
+                    <div id="clockNumbers" class="pull-left">{{ clock | date:'h'}}:{{ clock | date:'mm'}}</div>
+                    <div class="col-sm-2 text-left" >
                         <div id="clockSeconds" class="row">{{ clock | date:'ss'}}</div>
                         <div id="clockPeriod" class="row">{{ clock | date:'a'}}</div>
                     </div>
