@@ -10,7 +10,10 @@
         "type": "git",
         "url": "git+https://github.com/callumdmay/pi-notification-center.git"
     },
-    "devDependencies": {
-        "electron-prebuilt": "^1.2.0"
+    "dependencies": {
+        "bootstrap": "^3.3.7",
+        "electron-prebuilt": "^1.2.0",
+        "angular": "^1.5.8",
+        "fastclick": "^1.0.6"
     }
 }
