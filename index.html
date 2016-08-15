@@ -18,33 +18,8 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6" ng-controller="TimeCtrl">
-                <div class="row">
-                    <div id="clockDate" class="text-left">{{ clock | date:'EEEE'}}, {{ clock | date:'MMMM'}} {{ clock | date:'d'}}</div>
-                </div>
-                <div class="row">
-                    <div id="clockNumbers" class="pull-left">{{ clock | date:'h'}}:{{ clock | date:'mm'}}</div>
-                    <div class="col-sm-2 text-left">
-                        <div id="clockSeconds" class="row">{{ clock | date:'ss'}}</div>
-                        <div id="clockPeriod" class="row">{{ clock | date:'a'}}</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 text-center" ng-controller="weatherController">
-                <div ng-hide="!currentWeatherData || !forecastSentence">
-                    <div class="row">
-                        <span id="weatherCity">{{ currentWeatherData.name }}:</span>
-                        <span id="weatherTemperature">{{currentWeatherData.main.temp| number:0}}<sup id="weatherSymbol">&#8451</sup></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div id="weatherCondition" class="row">{{ currentWeatherData.weather[0].description }}</div>
-                            <div class="row">{{forecastSentence}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <ng-include src="'app/views/partials/clockPartial.html'"></ng-include>
+        <ng-include src="'app/views/partials/weatherPartial.html'"></ng-include>
         </div>
     </div>
 

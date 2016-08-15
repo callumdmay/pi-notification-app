@@ -1,0 +1,12 @@
+<div class="col-sm-6" ng-controller="TimeCtrl">
+    <div class="row">
+        <div id="clockDate" class="text-left">{{ clock | date:'EEEE'}}, {{ clock | date:'MMMM'}} {{ clock | date:'d'}}</div>
+    </div>
+    <div class="row">
+        <div id="clockNumbers" class="pull-left">{{ clock | date:'h'}}:{{ clock | date:'mm'}}</div>
+        <div class="col-sm-2 text-left">
+            <div id="clockSeconds" class="row">{{ clock | date:'ss'}}</div>
+            <div id="clockPeriod" class="row">{{ clock | date:'a'}}</div>
+        </div>
+    </div>
+</div>
