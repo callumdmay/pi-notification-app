@@ -6,8 +6,7 @@ controller('weatherController', function($scope, $http, $timeout) {
     $scope.getForecast = function() {
         $http.get('http://api.openweathermap.org/data/2.5/forecast?id=5913490&units=metric&&APPID=f9dbd911bc01df1d9ce563b2ba4d3209')
             .then(function(response) {
-                $scope.forecastWeatherData = angular.fromJson(response.data);
-                determineFutureForecast($scope.forecastWeatherData);
+                $scope.forecastSentence = determineFutureForecast(angular.fromJson(response.data));
             });
     };
 
@@ -41,7 +40,7 @@ controller('weatherController', function($scope, $http, $timeout) {
                 forecastDate = new Date(forecastWeatherData.list[count].dt * 1000);
                 count++;
             } while (forecastDate.getHours() != 9)
-                $scope.forecastSentence = "Expect " + forecastWeatherData.list[count].weather[0].description + " in the morning";
+                return "Expect " + forecastWeatherData.list[count].weather[0].description + " in the morning";
                 break;
 
             case (date.getHours() > 6 && date.getHours() <= 13):
@@ -49,7 +48,7 @@ controller('weatherController', function($scope, $http, $timeout) {
                     forecastDate = new Date(forecastWeatherData.list[count].dt * 1000);
                     count++;
                 } while (forecastDate.getHours() != 15)
-                $scope.forecastSentence = "Expect " + forecastWeatherData.list[count].weather[0].description + " in the afternoon";
+                return "Expect " + forecastWeatherData.list[count].weather[0].description + " in the afternoon";
                 break;
 
             case (date.getHours() > 13 && date.getHours() <= 19):
@@ -58,12 +57,11 @@ controller('weatherController', function($scope, $http, $timeout) {
                     count++;
                 } while (forecastDate.getHours() != 21)
 
-                // $scope.forecastSentence = "Future night forecast at " + Date(forecastWeatherData.list[count].dt * 1000).toString() + "is" + forecastWeatherData.list[count].weather.description;
-                $scope.forecastSentence = "Expect " + forecastWeatherData.list[count].weather[0].description + " this evening";
+                return "Expect " + forecastWeatherData.list[count].weather[0].description + " this evening";
                 break;
 
             default:
-                $scope.forecastSentence = "Error. Could not generate future forecast data";
+                return "Error. Could not generate future forecast data";
         }
     };
 
