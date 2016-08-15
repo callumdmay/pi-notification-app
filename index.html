@@ -35,10 +35,12 @@
                 <div ng-hide="!currentWeatherData">
                     <div class="row">
                         <span id="weatherCity">{{ currentWeatherData.name }}:</span>
-                        <span id="weatherTemperature">{{currentWeatherData.main.temp| number:0}}</span><sup id="weatherSymbol">&#8451</sup>
+                        <span id="weatherTemperature">{{currentWeatherData.main.temp| number:0}}<sup id="weatherSymbol">&#8451</sup></span>
+
                     </div>
                     <div class="row">
                         <p id="weatherCondition">{{ currentWeatherData.weather[0].description }}</p>
+                          <span >{{forecastSentence}}</span>
                     </div>
                 </div>
             </div>
