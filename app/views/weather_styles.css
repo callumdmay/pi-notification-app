@@ -29,3 +29,7 @@
   font-style:italic;
   font-weight: 300;
 }
+
+#weatherCondition:first-letter {
+    text-transform: uppercase;
+}
