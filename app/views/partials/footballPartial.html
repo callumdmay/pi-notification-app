@@ -1,0 +1,29 @@
+<div class="col-sm-6" ng-controller="footballController">
+    <table id="footballTable" class="table table-condensed">
+        <thead id="footballHeader">
+            <tr>
+                <th></th>
+                <th>Team</th>
+                <th>Pts</th>
+                <th>W</th>
+                <th>D</th>
+                <th>L</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="team in leagueTableData.standing | limitTo:6">
+                <th>{{team.position}}</th>
+                <th>{{team.teamName}}</th>
+                <th class="thin">{{team.points}}</th>
+                <th class="thin">{{team.wins}}</th>
+                <th class="thin">{{team.draws}}</th>
+                <th class="thin">{{team.losses}}</th>
+            </tr>
+        </tbody>
+    </table>
+    <div id="footballNextGame" class="col-sm-12">Next game:
+      {{ teamFixtures.fixtures[0].date | date:'EEEE'}}
+      {{ teamFixtures.fixtures[0].date | date:'LLLL'}}
+      {{ teamFixtures.fixtures[0].date | date:'d'}}
+    </div>
+</div>

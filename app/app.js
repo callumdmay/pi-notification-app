@@ -1,4 +1,5 @@
 angular.module('notificationApp', [
   'notificationApp.clockController',
-  'notificationApp.weatherController'
+  'notificationApp.weatherController',
+  'notificationApp.footballController'
 ]);
