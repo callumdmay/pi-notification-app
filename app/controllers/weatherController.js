@@ -16,14 +16,14 @@ controller('weatherController', function($scope, $http, $timeout) {
                 $scope.currentWeatherData = angular.fromJson(response.data);
             });
     };
-
     // Function to replicate setInterval using $timeout service.
     $scope.intervalFunction = function() {
+        $scope.getCurrentWeather();
+        $scope.getForecast();
         $timeout(function() {
-            $scope.getCurrentWeather();
-            $scope.getForecast();
+
             $scope.intervalFunction();
-        }, 1000)
+        }, 1800000)
     };
 
     // Kick off the interval
@@ -36,10 +36,10 @@ controller('weatherController', function($scope, $http, $timeout) {
 
         switch (true) {
             case (date.getHours() <= 6 || date.getHours() > 19):
-            do {
-                forecastDate = new Date(forecastWeatherData.list[count].dt * 1000);
-                count++;
-            } while (forecastDate.getHours() != 9)
+                do {
+                    forecastDate = new Date(forecastWeatherData.list[count].dt * 1000);
+                    count++;
+                } while (forecastDate.getHours() != 9)
                 return "Expect " + forecastWeatherData.list[count].weather[0].description + " in the morning";
                 break;
 
