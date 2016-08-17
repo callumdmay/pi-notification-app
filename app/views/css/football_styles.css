@@ -1,13 +1,17 @@
 #footballHeader {
-  color: #fff;
-}
-
-#footballTable {
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-
+    color: #fff;
 }
 #footballNextGame {
-  font-size: 20px;
-  color: #fff;
+    font-size: 20px;
+    color: #fff;
+}
+#footballDiv1 {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    height: 190px !important;
+    overflow: auto;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
