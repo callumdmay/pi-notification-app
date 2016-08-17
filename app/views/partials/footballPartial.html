@@ -1,5 +1,5 @@
 <div class="col-sm-6" ng-controller="footballController">
-    <div id="footballDiv1">
+    <div id="footballDiv1" ng-hide="!leagueTableData || !teamFixtures">
         <table id="footballTable" class="table table-condensed">
             <thead id="footballHeader">
                 <tr>
@@ -23,7 +23,7 @@
             </tbody>
         </table>
     </div>
-    <div id="footballNextGame" class="col-sm-12">Next game:
+    <div id="footballNextGame" class="col-sm-12" ng-hide="!leagueTableData || !teamFixtures">Next game:
         {{ teamFixtures.fixtures[0].date | date:'EEEE'}}
         {{ teamFixtures.fixtures[0].date | date:'LLLL'}}
         {{ teamFixtures.fixtures[0].date | date:'d'}}
