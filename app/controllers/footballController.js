@@ -8,7 +8,6 @@ controller('footballController', function($scope, $http, $timeout) {
                 $scope.leagueTableData = angular.fromJson(response.data);
             });
     };
-    $scope.getLeagueTable();
 
     $scope.getFixtures = function() {
         $http.get('http://api.football-data.org/v1/teams/81/fixtures')
@@ -16,15 +15,14 @@ controller('footballController', function($scope, $http, $timeout) {
                 $scope.teamFixtures = angular.fromJson(response.data);
             });
     };
-    $scope.getFixtures();
-
 
     // Function to replicate setInterval using $timeout service.
     $scope.intervalFunction = function() {
+        $scope.getFixtures();
+        $scope.getLeagueTable();
         $timeout(function() {
-            $scope.getLeagueTable();
-            $scope.intervalFunction();
-        }, 43200000)// wait 12 hours between api queries
+                $scope.intervalFunction();
+            }, 43200000) // wait 12 hours between api queries
     };
 
     // Kick off the interval
