@@ -1,7 +1,7 @@
 <div class="col-sm-6 text-center" ng-controller="weatherController">
     <div ng-hide="!currentWeatherData || !forecastSentence">
         <div class="row">
-            <span id="weatherCity">{{ currentWeatherData.name }}:</span>
+        <input id="weatherCity" ng-model="weatherCity" ng-model-options="{ debounce: 100 }" ng-style="reSize(weatherCity)">
             <span id="weatherTemperature">{{currentWeatherData.main.temp| number:0}}<sup id="weatherSymbol">&#8451</sup></span>
         </div>
         <div class="row">

@@ -1,17 +1,31 @@
 angular.module('notificationApp.weatherController', []).
 controller('weatherController', function($scope, $http, $timeout) {
 
+    $scope.$watch('weatherCity', function() {
+        $scope.getCurrentWeather();
+        $scope.getForecast();
+    });
 
+    $scope.reSize = function(str) {
+        var charWidth = 20;
+        return {
+            "width": (str.length + 1) * charWidth + "px"
+        };
+    };
+
+    ;
+
+    $scope.weatherCity = "Calgary";
     // Function to get the data
     $scope.getForecast = function() {
-        $http.get('http://api.openweathermap.org/data/2.5/forecast?id=5913490&units=metric&&APPID=f9dbd911bc01df1d9ce563b2ba4d3209')
+        $http.get('http://api.openweathermap.org/data/2.5/forecast?q=' + $scope.weatherCity + '&&id=5913490&units=metric&&APPID=f9dbd911bc01df1d9ce563b2ba4d3209')
             .then(function(response) {
                 $scope.forecastSentence = determineFutureForecast(angular.fromJson(response.data));
             });
     };
 
     $scope.getCurrentWeather = function() {
-        $http.get('http://api.openweathermap.org/data/2.5/weather?id=5913490&units=metric&&APPID=f9dbd911bc01df1d9ce563b2ba4d3209')
+        $http.get('http://api.openweathermap.org/data/2.5/weather?q=' + $scope.weatherCity + '&&id=5913490&units=metric&&APPID=f9dbd911bc01df1d9ce563b2ba4d3209')
             .then(function(response) {
                 $scope.currentWeatherData = angular.fromJson(response.data);
             });
