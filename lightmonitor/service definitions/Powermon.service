@@ -1,0 +1,12 @@
+[Unit]
+Description=Coldsnap Power Quality Monitor
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /home/root/power_monitor.py -i -r 60
+
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

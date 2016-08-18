@@ -1,0 +1,14 @@
+[Unit]
+Description=Coldsnap Accelerator
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/python /home/root/camserver.py -i
+
+Restart=always
+RestartSec=10
+WatchdogSec=400
+
+
+[Install]
+WantedBy=multi-user.target
