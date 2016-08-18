@@ -2,12 +2,6 @@ startApplication();
 
 function startApplication() {
 
-    var myApp = angular.module('notificationApp', [
-        'notificationApp.clockController',
-        'notificationApp.weatherController',
-        'notificationApp.footballController'
-    ]);
-
     fetchData().then(bootstrapApplication);
 
     function fetchData() {
@@ -15,7 +9,7 @@ function startApplication() {
         var $http = angular.injector(["ng"]).get("$http");
 
         return $http.get("APIkeys.json").then(function(response) {
-            myApp.constant("APIkeys", angular.fromJson(response.data));
+            angular.module('notificationApp').constant("APIkeys", angular.fromJson(response.data));
         }, function(errorResponse) {
             var div = document.createElement("div");
             div.style.fontSize = "xx-large";

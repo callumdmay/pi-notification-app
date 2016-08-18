@@ -5,12 +5,42 @@ body {
     margin: 0;
 }
 
+.link {
+  color: inherit;
+  background-color: inherit;
+  text-decoration: none;
+  border: none;
+}
+
+.link:hover {
+  color: inherit;
+  background-color: inherit;
+  text-decoration: none;
+  border: none;
+}
+
+.link:active {
+  color: inherit;
+  background-color: inherit;
+  text-decoration: none;
+  border: none;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+}
+
 .thin {
   font-family: Roboto, sans-serif;
   font-weight: 100;
 }
 
-/*div[class="row"] {
+.bright{
+  color: #fff;
+}
+/*
+div[class="row"] {
     border: 1px dotted rgba(0, 0, 0, 0.5);
 }
 

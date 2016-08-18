@@ -1,14 +1,20 @@
-<div class="col-sm-6 text-center" ng-controller="weatherController">
-    <div ng-hide="!currentWeatherData || !forecastWeatherData">
-        <div class="row">
-        <input id="weatherCity" ng-model="weatherCity" ng-model-options="{ debounce: 100 }" ng-style="reSize(weatherCity)">
-            <span id="weatherTemperature">{{ currentWeatherData.current_observation.temp_c }}<sup id="weatherSymbol">&#8451</sup></span>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div id="weatherCondition">Currently {{ currentWeatherData.current_observation.weather | lowercase }}</div>
-                <div class="row">Today: {{forecastWeatherData.forecast.txt_forecast.forecastday[0].fcttext_metric}}</div>
+<a href="#/weather" class="link">
+    <div class="col-sm-6 text-center" ng-controller="weatherController">
+        <div ng-hide="!currentWeatherData || !forecastWeatherData">
+            <div class="row">
+                <input id="weatherCity" ng-model="weatherCity" ng-model-options="{ debounce: 100 }" ng-style="reSize(weatherCity)">
+                <span id="weatherTemperature">{{ currentWeatherData.current_observation.temp_c }}
+                    <sup id="weatherSymbol">&#8451</sup>
+                </span>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="weatherCondition">Currently
+                        {{ currentWeatherData.current_observation.weather | lowercase }}</div>
+                    <div class="row">Today:
+                        {{forecastWeatherData.forecast.txt_forecast.forecastday[0].fcttext_metric}}</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</a>
