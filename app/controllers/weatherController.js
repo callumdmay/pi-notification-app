@@ -36,9 +36,9 @@ controller('weatherController', function($scope, $http, $timeout, APIkeys) {
     };
     // Function to replicate setInterval using $timeout service.
     $scope.intervalFunction = function() {
+        $scope.getCurrentWeather();
+        $scope.getForecast();
         $timeout(function() {
-            $scope.getCurrentWeather();
-            $scope.getForecast();
             $scope.intervalFunction();
         }, 1800000)
     };
