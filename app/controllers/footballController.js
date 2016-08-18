@@ -27,9 +27,9 @@ controller('footballController', function($scope, $http, $timeout, APIkeys) {
 
     // Function to replicate setInterval using $timeout service.
     $scope.intervalFunction = function() {
-        $scope.getFixtures();
-        $scope.getLeagueTable();
         $timeout(function() {
+          $scope.getFixtures();
+          $scope.getLeagueTable();
                 $scope.intervalFunction();
             }, 43200000) // wait 12 hours between api queries
     };

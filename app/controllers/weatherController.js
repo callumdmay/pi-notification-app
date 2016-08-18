@@ -29,17 +29,16 @@ controller('weatherController', function($scope, $http, $timeout, APIkeys) {
     $scope.getForecast = function() {
         $http({
             method: 'GET',
-            url: 'http://api.wunderground.com/api/' + APIkeys.weatherAPIkey + '/forecast/q/' + $scope.weatherCountry + '/' + $scope.weatherCity + '.json',
+            url: 'http://api.wunderground.com/api/' + APIkeys.weatherAPIkey + '/forecast10day/q/' + $scope.weatherCountry + '/' + $scope.weatherCity + '.json',
         }).then(function(response) {
             $scope.forecastWeatherData = angular.fromJson(response.data);
         });
     };
     // Function to replicate setInterval using $timeout service.
     $scope.intervalFunction = function() {
-        $scope.getCurrentWeather();
-        $scope.getForecast();
         $timeout(function() {
-
+            $scope.getCurrentWeather();
+            $scope.getForecast();
             $scope.intervalFunction();
         }, 1800000)
     };
