@@ -1,6 +1,6 @@
 <a href="#/" class="link">
     <div class="row">
-        <table class="table table-condensed">
+        <table class="table table-condensed medium">
             <thead>
                 <tr class="row bright">
                     <th></th>
@@ -11,7 +11,7 @@
             </thead>
             <tbody>
                 <tr class="row">
-                    <td class="col-md-2 text-center">Conditions</td>
+                    <td class="col-md-2 text-center"></td>
                     <td class="col-md-2 text-center" ng-repeat="forecast in forecastWeatherData.forecast.simpleforecast.forecastday | limitTo: 5">
                         {{forecast.conditions}}
                     </td>

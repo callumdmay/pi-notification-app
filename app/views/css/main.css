@@ -31,14 +31,65 @@ body {
   min-height: 100vh; /* These two lines are counted as one :-)       */
 }
 
+
+.dimmed {
+  color: #666;
+}
+
+.normal {
+  color: #999;
+}
+
+.bright {
+  color: #fff;
+}
+
+.xsmall {
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.small {
+  font-size: 20px;
+  line-height: 25px;
+}
+
+.medium {
+  font-size: 30px;
+  line-height: 35px;
+}
+
+.large {
+  font-size: 65px;
+  line-height: 65px;
+}
+
+.xlarge {
+  font-size: 75px;
+  line-height: 75px;
+  letter-spacing: -3px;
+}
+
 .thin {
   font-family: Roboto, sans-serif;
   font-weight: 100;
 }
 
-.bright{
-  color: #fff;
+.light {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 300;
 }
+
+.regular {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 400;
+}
+
+.bold {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 700;
+}
+
 /*
 div[class="row"] {
     border: 1px dotted rgba(0, 0, 0, 0.5);
