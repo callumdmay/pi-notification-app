@@ -18,7 +18,7 @@ controller('footballController', function($scope, $http, $timeout, APIkeys) {
             method: 'GET',
             url: 'http://api.football-data.org/v1/teams/81/fixtures',
             headers: {
-                'X-Auth-Token': $scope.footballAPIkey
+                'X-Auth-Token': APIkeys.footballAPIkey
             }
         }).then(function(response) {
             $scope.teamFixtures = angular.fromJson(response.data);
