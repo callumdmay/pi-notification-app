@@ -1,6 +1,15 @@
 angular.module('notificationApp.footballController', []).
 controller('footballController', function($scope, $http, $timeout, UserConfig) {
 
+    $scope.class = "";
+
+    $scope.rowClick = function(inputTeam) {
+        $scope.teamURL = inputTeam._links.team.href;
+        $scope.getFixtures();
+        $scope.class = "bright";
+
+    }
+
     $scope.getLeagueTable = function() {
         $http({
             method: 'GET',
@@ -14,9 +23,13 @@ controller('footballController', function($scope, $http, $timeout, UserConfig) {
     };
 
     $scope.getFixtures = function() {
+        if (!$scope.teamURL)
+            return;
+
         $http({
             method: 'GET',
-            url: 'http://api.football-data.org/v1/teams/81/fixtures',
+            url: $scope.teamURL + '/fixtures',
+            //  url: 'http://api.football-data.org/v1/teams/81/fixtures',
             headers: {
                 'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
             }

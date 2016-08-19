@@ -1,5 +1,5 @@
 <div class="col-sm-6" ng-controller="footballController">
-    <div id="footballDiv1" ng-hide="!leagueTableData || !teamFixtures">
+    <div id="footballDiv1" ng-hide="!leagueTableData">
         <table id="footballTable" class="table table-condensed">
             <thead id="footballHeader">
                 <tr>
@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="team in leagueTableData.standing">
+                <tr ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team)">
                     <th>{{team.position}}</th>
                     <th>{{team.teamName}}</th>
                     <th class="thin">{{team.points}}</th>
