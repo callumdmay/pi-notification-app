@@ -1,5 +1,5 @@
 angular.module('notificationApp.weatherController', []).
-controller('weatherController', function($scope, $http, $timeout, APIkeys) {
+controller('weatherController', function($scope, $http, $timeout, UserConfig) {
 
     $scope.$watch('weatherCity', function() {
         $scope.getCurrentWeather();
@@ -20,7 +20,7 @@ controller('weatherController', function($scope, $http, $timeout, APIkeys) {
     $scope.getCurrentWeather = function() {
         $http({
             method: 'GET',
-            url: 'http://api.wunderground.com/api/' + APIkeys.weatherAPIkey + '/conditions/q/' + $scope.weatherCountry + '/' + $scope.weatherCity + '.json',
+            url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/conditions/q/' + UserConfig.country + '/' + UserConfig.city + '.json',
         }).then(function(response) {
             $scope.currentWeatherData = angular.fromJson(response.data);
         });
@@ -29,7 +29,7 @@ controller('weatherController', function($scope, $http, $timeout, APIkeys) {
     $scope.getForecast = function() {
         $http({
             method: 'GET',
-            url: 'http://api.wunderground.com/api/' + APIkeys.weatherAPIkey + '/forecast10day/q/' + $scope.weatherCountry + '/' + $scope.weatherCity + '.json',
+            url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/forecast10day/q/' + UserConfig.country + '/' + UserConfig.city + '.json',
         }).then(function(response) {
             $scope.forecastWeatherData = angular.fromJson(response.data);
         });
