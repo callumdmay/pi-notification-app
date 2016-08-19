@@ -1,20 +1,21 @@
 {
-    "name": "pi-notification-center",
-    "version": "1.0.0",
-    "description": "A Notification Center for the Raspberry Pi",
-    "main": "./main.js",
-    "scripts": {
-        "start": "electron ."
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/callumdmay/pi-notification-center.git"
-    },
-    "dependencies": {
-        "bootstrap": "^3.3.7",
-        "electron-prebuilt": "^1.2.0",
-        "angular": "^1.5.8",
-        "fastclick": "^1.0.6",
-        "angular-route": "^1.5.8"
-    }
+  "name": "pi-notification-center",
+  "version": "1.0.0",
+  "description": "A Notification Center for the Raspberry Pi",
+  "main": "./main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/callumdmay/pi-notification-center.git"
+  },
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-route": "^1.5.8",
+    "bootstrap": "^3.3.7",
+    "electron-prebuilt": "^1.2.0",
+    "fastclick": "^1.0.6",
+    "moment": "^2.14.1"
+  }
 }

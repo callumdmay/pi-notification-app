@@ -1,7 +1,6 @@
 angular.module('notificationApp.footballController', []).
 controller('footballController', function($scope, $http, $timeout, UserConfig) {
 
-    $scope.class = "";
     $scope.currentTeam;
 
     $scope.rowClick = function(inputTeam) {
@@ -40,7 +39,7 @@ controller('footballController', function($scope, $http, $timeout, UserConfig) {
                 'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
             }
         }).then(function(response) {
-            $scope.teamFixtures = angular.fromJson(response.data);
+            $scope.fixtureStatus = "Next match " + moment(response.data.fixtures[0].date).fromNow();
         });
     };
 
