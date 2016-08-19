@@ -2,25 +2,17 @@ startApplication();
 
 function startApplication() {
 
-    var myApp = angular.module('notificationApp', [
-        'notificationApp.clockController',
-        'notificationApp.weatherController',
-        'notificationApp.footballController'
-    ]);
-
     fetchData().then(bootstrapApplication);
 
     function fetchData() {
 
         var $http = angular.injector(["ng"]).get("$http");
 
-        return $http.get("APIkeys.json").then(function(response) {
-            myApp.constant("APIkeys", angular.fromJson(response.data));
+        return $http.get("UserConfig.json").then(function(response) {
+            angular.module('notificationApp').constant("UserConfig", angular.fromJson(response.data));
         }, function(errorResponse) {
-            var div = document.createElement("div");
-            div.style.fontSize = "xx-large";
-            div.innerHTML = "Error: Could not find APIkeys.json. Make sure it is at the root of the application";
-            document.body.insertBefore(div, document.body.firstChild);
+            alert("Error: Could not find UserConfig.json. Make sure it is at the root of the application");
+            throw new Error();
         });
     }
 

@@ -1,5 +1,5 @@
 angular.module('notificationApp.weatherController', []).
-controller('weatherController', function($scope, $http, $timeout) {
+controller('weatherController', function($scope, $http, $timeout, UserConfig) {
 
     $scope.$watch('weatherCity', function() {
         $scope.getCurrentWeather();
@@ -13,29 +13,32 @@ controller('weatherController', function($scope, $http, $timeout) {
         };
     };
 
-    ;
-
     $scope.weatherCity = "Calgary";
+    $scope.weatherCountry = "Canada";
+
     // Function to get the data
-    $scope.getForecast = function() {
-        $http.get('http://api.openweathermap.org/data/2.5/forecast?q=' + $scope.weatherCity + '&&id=5913490&units=metric&&APPID=f9dbd911bc01df1d9ce563b2ba4d3209')
-            .then(function(response) {
-                $scope.forecastSentence = determineFutureForecast(angular.fromJson(response.data));
-            });
+    $scope.getCurrentWeather = function() {
+        $http({
+            method: 'GET',
+            url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/conditions/q/' + UserConfig.country + '/' + UserConfig.city + '.json',
+        }).then(function(response) {
+            $scope.currentWeatherData = angular.fromJson(response.data);
+        });
     };
 
-    $scope.getCurrentWeather = function() {
-        $http.get('http://api.openweathermap.org/data/2.5/weather?q=' + $scope.weatherCity + '&&id=5913490&units=metric&&APPID=f9dbd911bc01df1d9ce563b2ba4d3209')
-            .then(function(response) {
-                $scope.currentWeatherData = angular.fromJson(response.data);
-            });
+    $scope.getForecast = function() {
+        $http({
+            method: 'GET',
+            url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/forecast10day/q/' + UserConfig.country + '/' + UserConfig.city + '.json',
+        }).then(function(response) {
+            $scope.forecastWeatherData = angular.fromJson(response.data);
+        });
     };
     // Function to replicate setInterval using $timeout service.
     $scope.intervalFunction = function() {
         $scope.getCurrentWeather();
         $scope.getForecast();
         $timeout(function() {
-
             $scope.intervalFunction();
         }, 1800000)
     };
