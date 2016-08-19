@@ -8,4 +8,4 @@ Interactive notification center designed to run on the 8 inch Raspberry Pi Touch
 
 Future features include integration with Apple's reminder/calender API, and integration with Google Maps API for transit times
 
-Written in javascript using [AngularJS](https://angularjs.org/), [Electron](http://electron.atom.io/) and [Node.js](https://nodejs.org/en/)
+Written in JavaScript using [AngularJS](https://angularjs.org/), [Electron](http://electron.atom.io/) and [Node.js](https://nodejs.org/en/)
