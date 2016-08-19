@@ -19,6 +19,8 @@ import thread
 from optparse import OptionParser
 import platform
 import random
+import json
+
 '''
 import os
 import sys	#Nathan
@@ -44,7 +46,11 @@ import paramiko
 # peripheral libraries
 ###########################################################
 from flask import Flask
+from flask import render_template
 from flask.ext.restful import reqparse, abort, Api, Resource
+from flask import Response
+from flask import request
+from flask import jsonify
 
 # internal libraries and modules
 ###########################################################
@@ -72,7 +78,7 @@ CALLBACK_PORT = 5000  # Flask listening port
 
 # configuration
 Config = object()
-ConfigFilePath = os.path.join(ScriptFolderPath,'lightmonitor.cfg')
+ConfigFilePath = os.path.join(ScriptFolderPath, 'lightmonitor.cfg')
 Default_Config_FilePath = os.path.join(ScriptFolderPath, 'default.cfg')
 
 # logging
@@ -124,13 +130,64 @@ class Camera(Resource):
 # setup routings here
 api.add_resource(Camera, '/OD<int:od_id>')
 
+
 @app.route("/")
 def hello():
-    return "Hello World!"
+	return "Hello World!"
+
 
 @app.route("/light")
 def light_level():
-    return "Light level = {}".format(random.randrange(0,255))
+	camera_ready = random.choice((True, False, True, True, True))
+	if camera_ready:
+		return "Light level = {}".format(random.randrange(0, 255))
+	else:
+		return "Camera not ready or not responding"
+
+
+@app.route("/light_level", methods=['GET', 'POST'])
+def get_data():
+	if request.method == 'GET':
+		camera_ready = random.choice((True, False, True, True, True))
+		#camera_ready = True
+		if camera_ready:
+			data = {"level": random.randrange(0, 255), "histogram": random.randrange(0, 255)}
+			js = json.dumps(data)
+			resp = Response(js, status=200, mimetype='application/json')
+			resp.headers ['Link'] = 'http://evildad.com'
+			return resp
+		else:
+			message = {
+				'status': 404,
+				'message': 'Camera not responding or not available'.format(request.json),
+			}
+			resp = jsonify(message)
+			resp.status_code = 404
+			return resp
+	if request.method == 'POST':
+		if 'backlight_level' in request.json:
+			pass  # TODO set the actual backlight level
+			backlight_set = random.choice((True, False, True, True, True))
+			# camera_ready = True
+			if backlight_set:
+				return 'backlight level set to {}! \n'.format(request.json ['backlight_level'])
+			else:
+				system_error_message = "stop bugging me!"
+				message = {
+					'status': 404,
+					'message': 'Backlight level set failed.  Information from system: {}'.format(system_error_message),
+				}
+				resp = jsonify(message)
+				resp.status_code = 404
+				return resp
+		else:
+			message = {
+				'status': 404,
+				'message': 'No backlight level request found in {}'.format(request.json),
+			}
+			resp = jsonify(message)
+			resp.status_code = 404
+			return resp
 
 
 def set_up_logging(loglvl, console_logging_enabled):
@@ -245,7 +302,6 @@ if __name__ == '__main__':
 	# set up logging
 	logger = set_up_logging(options.loglvl, options.console_logging_enabled)
 
-
 	#
 	#       configuration
 	#
@@ -297,9 +353,7 @@ if __name__ == '__main__':
 	#
 	random.seed()
 
-
-
 	while True:
 		pass
 
-			# end while True
+	# end while True
