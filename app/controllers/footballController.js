@@ -25,7 +25,7 @@ controller('footballController', function($scope, $http, $timeout, UserConfig) {
         });
     };
 
-    // Function to replicate setInterval using $timeout service.
+    //Function loops to fetch new data based on timeout
     $scope.intervalFunction = function() {
         $scope.getFixtures();
         $scope.getLeagueTable();
