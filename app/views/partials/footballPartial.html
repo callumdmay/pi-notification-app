@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team)">
+                <tr ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team)" ng-class="selected(team)">
                     <th>{{team.position}}</th>
                     <th>{{team.teamName}}</th>
                     <th class="thin">{{team.points}}</th>
