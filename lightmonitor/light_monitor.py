@@ -167,8 +167,7 @@ def get_data():
 	if request.method == 'POST':
 		if 'backlight_level' in request.json:
 			pass  # TODO set the actual backlight level
-			backlight_set = random.choice((True, False, True, True, True))
-			# camera_ready = True
+			backlight_set = random.choice((True, False, False, False, True))
 			if backlight_set:
 				return 'backlight level set to {}! \n'.format(request.json ['backlight_level'])
 			else:
