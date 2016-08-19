@@ -8,7 +8,7 @@ controller('weatherController', function($scope, $http, $timeout, UserConfig) {
             method: 'GET',
             url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/conditions/q/' + UserConfig.country + '/' + UserConfig.city + '.json',
         }).then(function(response) {
-            $scope.currentWeatherData = angular.fromJson(response.data);
+            $scope.currentWeatherData = response.data;
         });
     };
 
@@ -17,7 +17,7 @@ controller('weatherController', function($scope, $http, $timeout, UserConfig) {
             method: 'GET',
             url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/forecast10day/q/' + UserConfig.country + '/' + UserConfig.city + '.json',
         }).then(function(response) {
-            $scope.forecastWeatherData = angular.fromJson(response.data);
+            $scope.forecastWeatherData = response.data;
         });
     };
 

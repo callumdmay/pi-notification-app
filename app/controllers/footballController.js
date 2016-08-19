@@ -23,7 +23,7 @@ controller('footballController', function($scope, $http, $timeout, UserConfig) {
                 'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
             }
         }).then(function(response) {
-            $scope.leagueTableData = angular.fromJson(response.data);
+            $scope.leagueTableData = response.data;
         });
     };
 
