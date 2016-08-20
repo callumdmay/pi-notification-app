@@ -1,28 +1,14 @@
 angular.module('notificationApp.weatherController', []).
 controller('weatherController', function($scope, $http, $timeout, UserConfig) {
 
-    $scope.$watch('weatherCity', function() {
-        $scope.getCurrentWeather();
-        $scope.getForecast();
-    });
+    $scope.currentCity = UserConfig.city;
 
-    $scope.reSize = function(str) {
-        var charWidth = 20;
-        return {
-            "width": (str.length + 1) * charWidth + "px"
-        };
-    };
-
-    $scope.weatherCity = "Calgary";
-    $scope.weatherCountry = "Canada";
-
-    // Function to get the data
     $scope.getCurrentWeather = function() {
         $http({
             method: 'GET',
             url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/conditions/q/' + UserConfig.country + '/' + UserConfig.city + '.json',
         }).then(function(response) {
-            $scope.currentWeatherData = angular.fromJson(response.data);
+            $scope.currentWeatherData = response.data;
         });
     };
 
@@ -31,10 +17,11 @@ controller('weatherController', function($scope, $http, $timeout, UserConfig) {
             method: 'GET',
             url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/forecast10day/q/' + UserConfig.country + '/' + UserConfig.city + '.json',
         }).then(function(response) {
-            $scope.forecastWeatherData = angular.fromJson(response.data);
+            $scope.forecastWeatherData = response.data;
         });
     };
-    // Function to replicate setInterval using $timeout service.
+
+    //Function loops to fetch new data based on timeout
     $scope.intervalFunction = function() {
         $scope.getCurrentWeather();
         $scope.getForecast();
@@ -45,41 +32,5 @@ controller('weatherController', function($scope, $http, $timeout, UserConfig) {
 
     // Kick off the interval
     $scope.intervalFunction();
-
-    function determineFutureForecast(forecastWeatherData) {
-        var date = new Date();
-        var count = 0;
-        var forecastDate;
-
-        switch (true) {
-            case (date.getHours() <= 6 || date.getHours() > 19):
-                do {
-                    forecastDate = new Date(forecastWeatherData.list[count].dt * 1000);
-                    count++;
-                } while (forecastDate.getHours() != 9)
-                return "Expect " + forecastWeatherData.list[count].weather[0].description + " in the morning";
-                break;
-
-            case (date.getHours() > 6 && date.getHours() <= 13):
-                do {
-                    forecastDate = new Date(forecastWeatherData.list[count].dt * 1000);
-                    count++;
-                } while (forecastDate.getHours() != 15)
-                return "Expect " + forecastWeatherData.list[count].weather[0].description + " in the afternoon";
-                break;
-
-            case (date.getHours() > 13 && date.getHours() <= 19):
-                do {
-                    var forecastDate = new Date(forecastWeatherData.list[count].dt * 1000);
-                    count++;
-                } while (forecastDate.getHours() != 21)
-
-                return "Expect " + forecastWeatherData.list[count].weather[0].description + " this evening";
-                break;
-
-            default:
-                return "Error. Could not generate future forecast data";
-        }
-    };
 
 });

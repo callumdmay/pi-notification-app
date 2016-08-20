@@ -1,5 +1,5 @@
 <div class="col-sm-6" ng-controller="footballController">
-    <div id="footballDiv1" ng-hide="!leagueTableData || !teamFixtures">
+    <div id="footballDiv1" ng-hide="!leagueTableData">
         <table id="footballTable" class="table table-condensed">
             <thead id="footballHeader">
                 <tr>
@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="team in leagueTableData.standing">
+                <tr ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team)" ng-class="selected(team)">
                     <th>{{team.position}}</th>
                     <th>{{team.teamName}}</th>
                     <th class="thin">{{team.points}}</th>
@@ -23,9 +23,9 @@
             </tbody>
         </table>
     </div>
-    <div id="footballNextGame" class="col-sm-12" ng-hide="!leagueTableData || !teamFixtures">Next game:
-        {{ teamFixtures.fixtures[0].date | date:'EEEE'}}
-        {{ teamFixtures.fixtures[0].date | date:'LLLL'}}
-        {{ teamFixtures.fixtures[0].date | date:'d'}}
+    <div>
+
+    <div id="footballNextGame" class="col-sm-12" ng-hide="!currentTeam">
+      <img src="{{currentTeam.crestURI}}"  width="30" height="30"> {{fixtureStatus}}
     </div>
 </div>

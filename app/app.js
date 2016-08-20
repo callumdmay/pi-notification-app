@@ -10,7 +10,7 @@ function startApplication() {
 
         return $http.get("UserConfig.json").then(function(response) {
             angular.module('notificationApp').constant("UserConfig", angular.fromJson(response.data));
-        }, function(errorResponse) {
+        }, function() {
             alert("Error: Could not find UserConfig.json. Make sure it is at the root of the application");
             throw new Error();
         });
@@ -21,4 +21,4 @@ function startApplication() {
             angular.bootstrap(document, ["notificationApp"]);
         });
     }
-};
+}

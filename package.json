@@ -3,18 +3,32 @@
     "version": "1.0.0",
     "description": "A Notification Center for the Raspberry Pi",
     "main": "./main.js",
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "browser": true,
+            "node": true
+        },
+        "globals": {
+            "angular": 1,
+            "moment": 1
+        }
+    },
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+        "test": "eslint ."
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/callumdmay/pi-notification-center.git"
     },
     "dependencies": {
+        "angular": "^1.5.8",
+        "angular-route": "^1.5.8",
         "bootstrap": "^3.3.7",
         "electron-prebuilt": "^1.2.0",
-        "angular": "^1.5.8",
         "fastclick": "^1.0.6",
-        "angular-route": "^1.5.8"
+        "moment": "^2.14.1"
     }
+
 }
