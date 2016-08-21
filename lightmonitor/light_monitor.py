@@ -6,24 +6,20 @@
 # core python libraries
 ###########################################################
 from multiprocessing import Process, Pipe, current_process
+import threading
 import os
 import stat
 import logging
 import logging.handlers
 import time
-import ConfigParser
 import sys
 import datetime
 import threading
-import thread
 from optparse import OptionParser
 import platform
 import random
 import json
-from PIL import Image
-if 'Windows' not in platform.platform():
-	import picamera
-	from picamera import PiCamera
+import atexit
 
 
 '''
@@ -56,7 +52,10 @@ from flask.ext.restful import reqparse, abort, Api, Resource
 from flask import Response
 from flask import request
 from flask import jsonify
-
+from PIL import Image
+if 'Windows' not in platform.platform():
+	import picamera
+	from picamera import PiCamera
 # internal libraries and modules
 ###########################################################
 from config import Configuration
@@ -94,8 +93,8 @@ ImageFolderPath = os.path.join(ScriptFolderPath, 'static', 'images')
 LastImagePath = os.path.join(ImageFolderPath, 'last.jpg')
 
 # Flask
-app = Flask(__name__)
-api = Api(app)
+#app = Flask(__name__)
+#api = Api(app)
 CALLBACK_PORT = 5000  # Flask listening port
 
 # configuration filepaths
@@ -128,115 +127,6 @@ def web_listen(pipe, options):
 	##      app.run(host='0.0.0.0', port=CALLBACK_PORT, threaded=True, debug=False)
 	app.run(host='0.0.0.0', port=CALLBACK_PORT, debug=False)
 
-
-@app.route("/")
-def hello():
-	return "Hello World!"
-
-
-@app.route("/light")
-def light_level():
-	camera_ready = random.choice((True, False, True, True, True))
-	if camera_ready:
-		return "Light level = {}".format(random.randrange(0, 255))
-	else:
-		return "Camera not ready or not responding"
-
-
-@app.route("/light_level", methods=['GET', 'POST'])
-def get_data():
-	if request.method == 'GET':
-		camera_ready = random.choice((True, False, True, True, True))
-		#camera_ready = True
-		if camera_ready:
-			data = {"level": random.randrange(0, 255), "histogram": random.randrange(0, 255)}
-			js = json.dumps(data)
-			resp = Response(js, status=200, mimetype='application/json')
-			resp.headers ['Link'] = 'http://evildad.com'
-			return resp
-		else:
-			message = {
-				'status': 404,
-				'message': 'Camera not responding or not available'.format(request.json),
-			}
-			resp = jsonify(message)
-			resp.status_code = 404
-			return resp
-	if request.method == 'POST':
-		if 'backlight_level' in request.json:
-			pass  # TODO set the actual backlight level
-			backlight_set = random.choice((True, False, False, False, True))
-			if backlight_set:
-				return 'backlight level set to {}! \n'.format(request.json ['backlight_level'])
-			else:
-				system_error_message = "stop bugging me!"
-				message = {
-					'status': 404,
-					'message': 'Backlight level set failed.  Information from system: {}'.format(system_error_message),
-				}
-				resp = jsonify(message)
-				resp.status_code = 404
-				return resp
-		else:
-			message = {
-				'status': 404,
-				'message': 'No backlight level request found in {}'.format(request.json),
-			}
-			resp = jsonify(message)
-			resp.status_code = 404
-			return resp
-
-
-@app.route("/image", methods=['GET'])
-def analyze_image():
-	# this is a request to analyze an image.  We need to figure out which and then analyze it.  There can be a request
-	# for a specific file or 'check' which means take a picture and then analyze it
-	requested_image = request.args.get('image', 'current')
-	camera_params = None
-	if requested_image == "now":
-		filename = 'check.jpg'
-		try:
-			# camera_params = take_picture(filename)
-			image_to_analyze = os.path.join(ImageFolderPath, filename)
-		except Exception as e:
-			return "Sorry, there's something wrong with the camera.  Here's what I have: {}".format(e), 404
-	elif requested_image == "current":
-		# analyze the last picture taken
-		image_to_analyze = LastImagePath
-	else:
-		# we're looking for an existing image.  make sure it exists
-		image_file_path = os.path.join(ImageFolderPath, requested_image)
-		if os.path.exists(image_file_path):
-			image_to_analyze = image_file_path
-		else:
-			message = {
-				'status': 404,
-				'message': "Sorry, can't find the image named {}".format(requested_image),
-			}
-			resp = jsonify(message)
-			resp.status_code = 404
-			return "Sorry, can't find the image named {}".format(requested_image), 404
-	image_analysis_data = measure_light(image_to_analyze)
-	# now populate the graph information.  We are showing lightness, brightness and intensity
-	colours = ("red", "blue", "green")
-	c_tla = tuple("rgb")
-	parameters = ("lightness", "brightness", "intensity")
-	values = []
-	labels = []
-	for parameter in parameters:
-		for i, colour in enumerate(colours):
-			labels.append(parameter + "-" + c_tla [i])
-			values.append(image_analysis_data ["rgb " + parameter] [colour])
-	labels.append("overall intensity")
-	values.append(image_analysis_data ["overall intensity"])
-
-	# now populate the camera information TODO finish this routine
-	if camera_params:
-		logger.info('Here is the camera info that should go into the webpage: {}'.format(camera_params))
-
-	image = 'images/' + os.path.basename(image_to_analyze)
-	return render_template('image_summary.html', values=values, labels=labels, image=image,
-						   file=os.path.basename(image_to_analyze))
 
 
 def measure_light(image):
@@ -323,6 +213,151 @@ def print_camera_defaults():
 			print('Attribute|{}|Value |{}'.format(prop, str(getattr(cam, prop))))
 		except Exception as e:
 			print('Attribute|{}|Error, |{}'.format(prop, e))
+
+
+def create_app():
+	app = Flask(__name__)
+
+	@app.route("/")
+	def hello():
+		return "Hello World!"
+
+
+	@app.route("/light")
+	def light_level():
+		camera_ready = random.choice((True, False, True, True, True))
+		if camera_ready:
+			return "Light level = {}".format(random.randrange(0, 255))
+		else:
+			return "Camera not ready or not responding"
+
+
+	@app.route("/light_level", methods=['GET', 'POST'])
+	def get_data():
+		if request.method == 'GET':
+			camera_ready = random.choice((True, False, True, True, True))
+			#camera_ready = True
+			if camera_ready:
+				data = {"level": random.randrange(0, 255), "histogram": random.randrange(0, 255)}
+				js = json.dumps(data)
+				resp = Response(js, status=200, mimetype='application/json')
+				resp.headers ['Link'] = 'http://evildad.com'
+				return resp
+			else:
+				message = {
+					'status': 404,
+					'message': 'Camera not responding or not available'.format(request.json),
+				}
+				resp = jsonify(message)
+				resp.status_code = 404
+				return resp
+		if request.method == 'POST':
+			if 'backlight_level' in request.json:
+				pass  # TODO set the actual backlight level
+				backlight_set = random.choice((True, False, False, False, True))
+				if backlight_set:
+					return 'backlight level set to {}! \n'.format(request.json ['backlight_level'])
+				else:
+					system_error_message = "stop bugging me!"
+					message = {
+						'status': 404,
+						'message': 'Backlight level set failed.  Information from system: {}'.format(system_error_message),
+					}
+					resp = jsonify(message)
+					resp.status_code = 404
+					return resp
+			else:
+				message = {
+					'status': 404,
+					'message': 'No backlight level request found in {}'.format(request.json),
+				}
+				resp = jsonify(message)
+				resp.status_code = 404
+				return resp
+
+
+	@app.route("/image", methods=['GET'])
+	def analyze_image():
+		# this is a request to analyze an image.  We need to figure out which and then analyze it.  There can be a request
+		# for a specific file or 'check' which means take a picture and then analyze it
+		requested_image = request.args.get('image', 'current')
+		camera_params = None
+		if requested_image == "now":
+			filename = 'check.jpg'
+			try:
+				# camera_params = take_picture(filename)
+				image_to_analyze = os.path.join(ImageFolderPath, filename)
+			except Exception as e:
+				return "Sorry, there's something wrong with the camera.  Here's what I have: {}".format(e), 404
+		elif requested_image == "current":
+			# analyze the last picture taken
+			image_to_analyze = LastImagePath
+		else:
+			# we're looking for an existing image.  make sure it exists
+			image_file_path = os.path.join(ImageFolderPath, requested_image)
+			if os.path.exists(image_file_path):
+				image_to_analyze = image_file_path
+			else:
+				message = {
+					'status': 404,
+					'message': "Sorry, can't find the image named {}".format(requested_image),
+				}
+				resp = jsonify(message)
+				resp.status_code = 404
+				return "Sorry, can't find the image named {}".format(requested_image), 404
+		image_analysis_data = measure_light(image_to_analyze)
+		# now populate the graph information.  We are showing lightness, brightness and intensity
+		colours = ("red", "blue", "green")
+		c_tla = tuple("rgb")
+		parameters = ("lightness", "brightness", "intensity")
+		values = []
+		labels = []
+		for parameter in parameters:
+			for i, colour in enumerate(colours):
+				labels.append(parameter + "-" + c_tla [i])
+				values.append(image_analysis_data ["rgb " + parameter] [colour])
+		labels.append("overall intensity")
+		values.append(image_analysis_data ["overall intensity"])
+
+		# now populate the camera information TODO finish this routine
+		if camera_params:
+			logger.info('Here is the camera info that should go into the webpage: {}'.format(camera_params))
+
+		image = 'images/' + os.path.basename(image_to_analyze)
+		return render_template('image_summary.html', values=values, labels=labels, image=image,
+							   file=os.path.basename(image_to_analyze))
+
+	def interrupt():
+		global yourThread
+		yourThread.cancel()
+
+	def doStuff():
+		global Config
+		global yourThread
+		with dataLock:
+			# Do your stuff with commonDataStruct Here
+			logger.info('rereading config file looking for changes - thread {}'.format(threading.current_thread().name))
+			Config = Configuration(Default_Config_FilePath)
+			logger.debug("Loading system config file from file: " + ConfigFilePath)
+			Config.load(ConfigFilePath)
+
+		# Set the next thread to happen
+		yourThread = threading.Timer(CONFIG_INTERVAL, doStuff, ())
+		yourThread.start()
+
+	def doStuffStart():
+		# Do initialisation stuff here
+		global yourThread
+		# Create your thread
+		yourThread = threading.Timer(CONFIG_INTERVAL, doStuff, ())
+		yourThread.start()
+
+	# Initiate
+	doStuffStart()
+	# When you kill Flask (SIGTERM), clear the trigger for the next thread
+	atexit.register(interrupt)
+	return app
+
 
 def set_up_logging(options):
 	# set up logging
@@ -461,7 +496,7 @@ if __name__ == '__main__':
 	# test mode modifications
 	#
 	if options.TestMode:
-		CONFIG_INTERVAL = 60 #shorten config interval for testing
+		CONFIG_INTERVAL = 10 #shorten config interval for testing
 
 		filename = 'check.jpg'
 		logger.info("taking picture - {}".format(filename))
@@ -521,28 +556,11 @@ if __name__ == '__main__':
 	#       Threads and processes
 	#
 
-	# set up multiprocessing for web listener
-	web_incoming, web_response = Pipe()
-	if Config.Web.enabled:
-		web_listener = Process(target=web_listen, args=((web_incoming, web_response),options), name='WebListn')
-		web_listener.start()
-		logger.debug('web_listener process started.  main process is {}'.format(current_process().pid))
-	else:
-		logger.info('Web Listener *not started* since it was not enabled')
+	# lock to control access to variable
+	dataLock = threading.Lock()
+	# thread handler
+	yourThread = threading.Thread()
 
-	# other threads
+	app = create_app()
+	app.run(host='0.0.0.0', port=CALLBACK_PORT, debug=False)
 
-	#
-	# ##########################     main loop
-	#
-	random.seed()
-
-	while True:
-
-		time.sleep(CONFIG_INTERVAL)
-		logger.info('rereading config file looking for changes')
-		Config = Configuration(Default_Config_FilePath)
-		logger.debug("Loading system config file from file: " + ConfigFilePath)
-		Config.load(ConfigFilePath)
-
-	# end while True
