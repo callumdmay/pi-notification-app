@@ -285,7 +285,7 @@ def create_app():
 		if requested_image == "now":
 			filename = 'check.jpg'
 			try:
-				# camera_params = take_picture(filename)
+				camera_params = take_picture(filename)
 				image_to_analyze = os.path.join(ImageFolderPath, filename)
 			except Exception as e:
 				return "Sorry, there's something wrong with the camera.  Here's what I have: {}".format(e), 404
