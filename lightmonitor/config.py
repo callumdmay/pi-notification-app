@@ -49,8 +49,7 @@ class Configuration(object):
 
                 else:
                     # parse the param string, formatting and cleaning as you go.  then put it into the object
-                    # TODO parse quoted strings
-                    templist = value.split(",")[:3]
+                    templist = value.split("|")[:3]
                     for i, string in enumerate(templist):
                         templist[i] = string.strip()
                     category, default, scope = tuple(templist)
@@ -268,6 +267,21 @@ class float_param(float):
         return "float_param"
 
 
+class tuple_param(tuple):
+    def __new__(typ, itr):
+        i = eval(itr)
+        if i is None:
+            seq = [None,]
+        else:
+            seq = [x for x in eval(itr)]
+        scope = ""
+        return tuple.__new__(typ, seq)
+
+    @property
+    def param_type(self):
+        return "tuple_param"
+
+
 class Section:
     pass
 
@@ -279,6 +293,8 @@ def set_param(category, value, scope):
         t = float_param(value)
     elif category == "boolean":
         t = bool_param(value)
+    elif category == "tuple":
+        t = tuple_param(value)
     else:
         t = str_param(value)
     t.scope = scope
@@ -293,6 +309,8 @@ def set_param_obj(param_obj, value):
         t = float_param(value)
     elif param_obj.param_type == "bool_param":
         t = bool_param(value)
+    elif param_obj.param_type == "tuple_param":
+        t = tuple_param(value)
     else:
         t = str_param(value)
     t.scope = scope

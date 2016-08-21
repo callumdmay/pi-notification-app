@@ -21,6 +21,10 @@ import platform
 import random
 import json
 from PIL import Image
+if 'Windows' not in platform.platform():
+	import picamera
+	from picamera import PiCamera
+
 
 '''
 import os
@@ -60,7 +64,19 @@ from config import Configuration
 #
 # Classes
 #
+class Camera(PiCamera):
+	"""picamera subclassed to add some extra functionality"""
+	def __init__(self, config = None):
+		"""add a config constructor"""
+		PiCamera.__init__(self)
+		if config:
+			self.config(config)
 
+	def config(self,config):
+		"""configure the camera with parameters passed in a dict"""
+		for parameter, value in config.__dict__.iteritems():
+			# print parameter, value
+			setattr(self, parameter, value)
 
 
 #
@@ -82,8 +98,7 @@ app = Flask(__name__)
 api = Api(app)
 CALLBACK_PORT = 5000  # Flask listening port
 
-# configuration
-Config = object()
+# configuration filepaths
 ConfigFilePath = os.path.join(ScriptFolderPath, 'lightmonitor.cfg')
 Default_Config_FilePath = os.path.join(ScriptFolderPath, 'default.cfg')
 
@@ -95,47 +110,23 @@ else:
 Logfilename = 'lightmonitorR.log'
 
 # Misc
-t0 = 0  # timer
-MONITOR_INTERVAL = 300  # interval in seconds between RTU check-ins
+CONFIG_INTERVAL = 300  # interval in seconds between config checks
 
 
 ######################################################################################################################
 
 
-def abort_if_od_id_isnt_valid(od_id):
-	# only allow OD1 or OD2
-	if od_id != 1 and od_id != 2:
-		abort(404, message="On Demand {0} doesn't exist.".format(od_id))
-
 
 def web_listen(pipe, options):
 	# thread to listen for incoming web requests
-	logger = set_up_logging(options)
-	logger.info('weblistener starting up on process {}'.format(current_process().pid))
+	if 'Windows' in platform.platform():
+		logger = set_up_logging(options)
+	else:
+		logger = logging.getLogger()
+	logger.info('webservice starting up on process {}'.format(current_process().pid))
 	web_incoming, web_response = pipe
 	##      app.run(host='0.0.0.0', port=CALLBACK_PORT, threaded=True, debug=False)
 	app.run(host='0.0.0.0', port=CALLBACK_PORT, debug=False)
-
-
-class Camera(Resource):
-	def get(self, od_id):
-		abort_if_od_id_isnt_valid(od_id)
-		response = ("no response from coprocessor after 5 seconds", 500)  # default - no response - internal error 500
-		logger.debug("web OD request.")
-		# if od_id is valid just put it into the web_listener pipe and wait for a response
-		web_incoming.send((od_id, time.time()))  # send the request and timestamp it
-		time.sleep(0.1)
-
-		if web_incoming.poll(5):  # wait for five seconds to respond and if response, populate the response information
-			response = web_incoming.recv()
-		else:
-			logger.error("main routine did not respond to incoming web OD request")
-
-		return response [0], response [1]
-
-
-# setup routings here
-api.add_resource(Camera, '/OD<int:od_id>')
 
 
 @app.route("/")
@@ -201,9 +192,14 @@ def analyze_image():
 	# this is a request to analyze an image.  We need to figure out which and then analyze it.  There can be a request
 	# for a specific file or 'check' which means take a picture and then analyze it
 	requested_image = request.args.get('image', 'current')
-	if requested_image == "check":
-		# take a picture and analyze it TODO: write this routine
-		return "Eventually this routine will take a picture and analyze it.  Stay tuned!"
+	camera_params = None
+	if requested_image == "now":
+		filename = 'check.jpg'
+		try:
+			# camera_params = take_picture(filename)
+			image_to_analyze = os.path.join(ImageFolderPath, filename)
+		except Exception as e:
+			return "Sorry, there's something wrong with the camera.  Here's what I have: {}".format(e), 404
 	elif requested_image == "current":
 		# analyze the last picture taken
 		image_to_analyze = LastImagePath
@@ -219,7 +215,7 @@ def analyze_image():
 			}
 			resp = jsonify(message)
 			resp.status_code = 404
-			return resp
+			return "Sorry, can't find the image named {}".format(requested_image), 404
 	image_analysis_data = measure_light(image_to_analyze)
 	# now populate the graph information.  We are showing lightness, brightness and intensity
 	colours = ("red", "blue", "green")
@@ -229,13 +225,18 @@ def analyze_image():
 	labels = []
 	for parameter in parameters:
 		for i, colour in enumerate(colours):
-			labels.append(parameter + "-" + c_tla[i])
-			values.append(image_analysis_data["rgb "+ parameter][colour])
+			labels.append(parameter + "-" + c_tla [i])
+			values.append(image_analysis_data ["rgb " + parameter] [colour])
 	labels.append("overall intensity")
 	values.append(image_analysis_data ["overall intensity"])
 
+	# now populate the camera information TODO finish this routine
+	if camera_params:
+		logger.info('Here is the camera info that should go into the webpage: {}'.format(camera_params))
+
 	image = 'images/' + os.path.basename(image_to_analyze)
-	return render_template('image_summary.html', values=values, labels=labels, image=image)
+	return render_template('image_summary.html', values=values, labels=labels, image=image,
+						   file=os.path.basename(image_to_analyze))
 
 
 def measure_light(image):
@@ -284,6 +285,44 @@ def measure_light(image):
 	return{"rgb lightness":colour_lightness, "rgb brightness": colour_brightness, "rgb intensity": colour_intensities, "overall intensity": overall_average}
 
 
+def take_picture(image_filename):
+	"""
+	take a picture and put it in filename.  set up camera according Config
+	return a dict of camera params.  The calling routine is to manage PiCamera exceptions
+	"""
+	if Config.Camera_Light_Measurement.mode == "fixed":
+		cam = Camera(Config.Camera_fixed)
+	else:
+		cam = PiCamera()
+	filename = os.path.join(ScriptFolderPath, 'static', 'images', image_filename)
+	logger.info("taking picture - {}".format(filename))
+	with cam:
+		cam.start_preview()
+		time.sleep(2)
+		cam.capture(filename)
+		for prop in dir(cam):
+			try:
+				if prop.startswith("_") or "method" in str(getattr(cam, prop)):
+					continue
+				print('Attribute|{}|Value |{}'.format(prop, str(getattr(cam, prop))))
+			except Exception as e:
+				print('Attribute|{}|Error, |{}'.format(prop, e))
+		# capture some key camera params in a dict
+		camera_params = dict(measure_mode=Config.Camera_Light_Measurement.mode, awb_gains=cam.awb_gains,
+							 awb_mode=cam.awb_mode, iso=cam.iso,
+							 meter_mode=cam.meter_mode, exposure_speed=cam.exposure_speed,
+							 resolution=cam.resolution, analog_gain=cam.analog_gain)
+	return camera_params
+
+
+def print_camera_defaults():
+	"""dump the camera object attributes to stdout"""
+	cam = picamera.PiCamera()
+	for prop in dir(cam):
+		try:
+			print('Attribute|{}|Value |{}'.format(prop, str(getattr(cam, prop))))
+		except Exception as e:
+			print('Attribute|{}|Error, |{}'.format(prop, e))
 
 def set_up_logging(options):
 	# set up logging
@@ -422,11 +461,55 @@ if __name__ == '__main__':
 	# test mode modifications
 	#
 	if options.TestMode:
-		for i in range(1,10):
-			filename =os.path.join(ScriptFolderPath, 'static', 'images', 'image{}.jpg'.format(i))
-			light_level = measure_light(filename)
-			logger.info("summary for image - image{}.jpg - {}".format(i,light_level))
-		sys.exit(0)
+		CONFIG_INTERVAL = 60 #shorten config interval for testing
+
+		filename = 'check.jpg'
+		logger.info("taking picture - {}".format(filename))
+		camera_params = take_picture(filename)
+		light_level = measure_light(os.path.join(ScriptFolderPath, 'static', 'images', filename))
+		light_level['camera_info'] = camera_params
+		logger.info("summary for image - {} - {}".format(filename, light_level))
+
+		# if Config.Camera_Light_Measurement.mode == "fixed":
+		# 	cam = Camera(Config.Camera_fixed)
+		# else:
+		# 	cam = PiCamera()
+		#
+		# with cam:
+		# 	cam.start_preview()
+		# 	time.sleep(2)
+		# 	cam.capture(filename)
+		# 	for prop in dir(cam):
+		# 		try:
+		# 			if prop.startswith("_") or "method" in str(getattr(cam, prop)):
+		# 				continue
+		# 			print('Attribute|{}|Value |{}'.format(prop, str(getattr(cam, prop))))
+		# 		except Exception as e:
+		# 			print('Attribute|{}|Error, |{}'.format(prop, e))
+		# 	# capture some key camera params in a dict
+		# 	camera_params = dict(measure_mode = Config.Camera_Light_Measurement.mode, awb_gains = cam.awb_gains,
+		# 						 awb_mode = cam.awb_mode,iso = cam.iso,
+		# 						 meter_mode=cam.meter_mode, exposure_speed=cam.exposure_speed,
+		# 						 resolution=cam.resolution, analog_gain=cam.analog_gain)
+		# logger.info("analyzing image - {}".format(filename))
+		# light_level = measure_light(filename)
+		# # add camera params
+		# light_level['camera_info'] = camera_params
+		# logger.info("summary for image - {} - {}".format(filename, light_level))
+		#sys.exit(0)
+
+		# filename = os.path.join(ScriptFolderPath, 'static', 'images', 'test.jpg')
+		# logger.info("analyzing image - {}".format(filename))
+		# light_level = measure_light(filename)
+		# logger.info("summary for image - {} - {}".format(filename, light_level))
+		# #sys.exit(0)
+		#
+		# for i in range(1,10):
+		# 	filename =os.path.join(ScriptFolderPath, 'static', 'images', 'image{}.jpg'.format(i))
+		# 	logger.info("analyzing image - {}".format(filename))
+		# 	light_level = measure_light(filename)
+		# 	logger.info("summary for image - image{}.jpg - {}".format(i,light_level))
+		# sys.exit(0)
 
 
 	#
@@ -455,7 +538,11 @@ if __name__ == '__main__':
 	random.seed()
 
 	while True:
-		pass
-		time.sleep(1)
+
+		time.sleep(CONFIG_INTERVAL)
+		logger.info('rereading config file looking for changes')
+		Config = Configuration(Default_Config_FilePath)
+		logger.debug("Loading system config file from file: " + ConfigFilePath)
+		Config.load(ConfigFilePath)
 
 	# end while True
