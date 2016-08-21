@@ -12,7 +12,7 @@ import stat
 import logging
 import logging.handlers
 import time
-import sys
+import pickle
 import datetime
 import threading
 from optparse import OptionParser
@@ -78,6 +78,14 @@ class Camera(PiCamera):
 			setattr(self, parameter, value)
 
 
+class PythonObjectEncoder(json.JSONEncoder):
+	"""a subclass workaround for unsupported JSON objects.  provides readable text"""
+	def default(self, obj):
+		logger.info("PythonObjectEncoder reports: {} is type {}".format(str(obj), type(obj)))
+		if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
+			return json.JSONEncoder.default(self, obj)
+		return ({'_python_object': str(type(obj)) + ":" + str(obj)})
+
 #
 # Constants, Global variables and instances
 #
@@ -116,17 +124,16 @@ CONFIG_INTERVAL = 300  # interval in seconds between config checks
 
 
 
-def web_listen(pipe, options):
-	# thread to listen for incoming web requests
-	if 'Windows' in platform.platform():
-		logger = set_up_logging(options)
-	else:
-		logger = logging.getLogger()
-	logger.info('webservice starting up on process {}'.format(current_process().pid))
-	web_incoming, web_response = pipe
-	##      app.run(host='0.0.0.0', port=CALLBACK_PORT, threaded=True, debug=False)
-	app.run(host='0.0.0.0', port=CALLBACK_PORT, debug=False)
-
+# def web_listen(pipe, options):
+# 	# thread to listen for incoming web requests
+# 	if 'Windows' in platform.platform():
+# 		logger = set_up_logging(options)
+# 	else:
+# 		logger = logging.getLogger()
+# 	logger.info('webservice starting up on process {}'.format(current_process().pid))
+# 	web_incoming, web_response = pipe
+# 	##      app.run(host='0.0.0.0', port=CALLBACK_PORT, threaded=True, debug=False)
+# 	app.run(host='0.0.0.0', port=CALLBACK_PORT, debug=False)
 
 
 def measure_light(image):
@@ -223,23 +230,44 @@ def create_app():
 		return "Hello World!"
 
 
-	@app.route("/light")
+	@app.route("/light_level")
 	def light_level():
-		camera_ready = random.choice((True, False, True, True, True))
-		if camera_ready:
-			return "Light level = {}".format(random.randrange(0, 255))
-		else:
-			return "Camera not ready or not responding"
+		""" measure ambient by taking a pic, analyzing it and returning it as JSON """
+		filename = 'last.jpg'
+		try:
+			camera_params = take_picture(filename)
+			light_level = measure_light(os.path.join(ScriptFolderPath, 'static', 'images', filename))
+			light_level['camera_info'] = camera_params
+		except Exception as e:
+			message = {
+				'status': 404,
+				'message': 'Errors getting light level.  Details: {}'.format(e),
+			}
+			resp = jsonify(message)
+			resp.status_code = 404
+			return resp
+		js = json.dumps(light_level, cls=PythonObjectEncoder)
+		resp = Response(js, status=200, mimetype='application/json')
+		resp.headers ['Link'] = 'http://evildad.com'
+		return resp
 
 
-	@app.route("/light_level", methods=['GET', 'POST'])
-	def get_data():
+	@app.route("/backlight", methods=['GET', 'POST'])
+	def get_set_backlight():
 		if request.method == 'GET':
 			camera_ready = random.choice((True, False, True, True, True))
 			#camera_ready = True
 			if camera_ready:
+				filename = 'last.jpg'
+				try:
+					camera_params = take_picture(filename)
+					image_to_analyze = os.path.join(ImageFolderPath, filename)
+					light_level = measure_light(os.path.join(ScriptFolderPath, 'static', 'images', filename))
+					light_level['camera_info'] = camera_params
+				except Exception as e:
+					return "Sorry, there's something wrong with the camera.  Here's what I have: {}".format(e), 404
 				data = {"level": random.randrange(0, 255), "histogram": random.randrange(0, 255)}
-				js = json.dumps(data)
+				js = json.dumps(light_level, cls=PythonObjectEncoder)
 				resp = Response(js, status=200, mimetype='application/json')
 				resp.headers ['Link'] = 'http://evildad.com'
 				return resp
