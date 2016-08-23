@@ -55,7 +55,7 @@ controller('weatherController', function($scope, $http, $timeout, UserConfig) {
             case "sunny":             return "wi-day-sunny";
             case "tstorms":           return "wi-thunderstorm";
 
-            default:                  return "ERROR";
+            default:                  return "wi-na";
         }
     }
 
