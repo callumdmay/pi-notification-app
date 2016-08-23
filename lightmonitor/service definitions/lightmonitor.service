@@ -3,7 +3,7 @@ Description=Ambient Light Measure Service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python /home/pi/light_monitor.py -i
+ExecStart=/home/pi/pi-notification-app/lightmonitor/venv/bin/python2.7 /home/pi/pi-notification-app/lightmonitor/light_monitor.py
 
 Restart=always
 RestartSec=10

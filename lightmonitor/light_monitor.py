@@ -20,6 +20,8 @@ import platform
 import random
 import json
 import atexit
+import subprocess
+import shlex
 
 
 '''
@@ -81,7 +83,7 @@ class Camera(PiCamera):
 class PythonObjectEncoder(json.JSONEncoder):
 	"""a subclass workaround for unsupported JSON objects.  provides readable text"""
 	def default(self, obj):
-		logger.info("PythonObjectEncoder reports: {} is type {}".format(str(obj), type(obj)))
+		#logger.debug("PythonObjectEncoder reports: {} is type {}".format(str(obj), type(obj)))
 		if isinstance(obj, (list, dict, str, unicode, int, float, bool, type(None))):
 			return json.JSONEncoder.default(self, obj)
 		return ({'_python_object': str(type(obj)) + ":" + str(obj)})
@@ -121,21 +123,6 @@ CONFIG_INTERVAL = 300  # interval in seconds between config checks
 
 
 ######################################################################################################################
-
-
-
-# def web_listen(pipe, options):
-# 	# thread to listen for incoming web requests
-# 	if 'Windows' in platform.platform():
-# 		logger = set_up_logging(options)
-# 	else:
-# 		logger = logging.getLogger()
-# 	logger.info('webservice starting up on process {}'.format(current_process().pid))
-# 	web_incoming, web_response = pipe
-# 	##      app.run(host='0.0.0.0', port=CALLBACK_PORT, threaded=True, debug=False)
-# 	app.run(host='0.0.0.0', port=CALLBACK_PORT, debug=False)
-
-
 def measure_light(image):
 	""""take an image and return an integer estimating its overall brightness"""
 	im = Image.open(image, 'r')
@@ -197,13 +184,15 @@ def take_picture(image_filename):
 		cam.start_preview()
 		time.sleep(2)
 		cam.capture(filename)
-		for prop in dir(cam):
-			try:
-				if prop.startswith("_") or "method" in str(getattr(cam, prop)):
-					continue
-				print('Attribute|{}|Value |{}'.format(prop, str(getattr(cam, prop))))
-			except Exception as e:
-				print('Attribute|{}|Error, |{}'.format(prop, e))
+		if logger.level == logging.DEBUG:
+			# dump the camera info to the screen
+			for prop in dir(cam):
+				try:
+					if prop.startswith("_") or "method" in str(getattr(cam, prop)):
+						continue
+					print('Attribute|{}|Value |{}'.format(prop, str(getattr(cam, prop))))
+				except Exception as e:
+					print('Attribute|{}|Error, |{}'.format(prop, e))
 		# capture some key camera params in a dict
 		camera_params = dict(measure_mode=Config.Camera_Light_Measurement.mode, awb_gains=cam.awb_gains,
 							 awb_mode=cam.awb_mode, iso=cam.iso,
@@ -281,37 +270,59 @@ def create_app():
 				return resp
 		if request.method == 'POST':
 			if 'backlight_level' in request.json:
-				pass  # TODO set the actual backlight level
-				backlight_set = random.choice((True, False, False, False, True))
-				if backlight_set:
-					return 'backlight level set to {}! \n'.format(request.json ['backlight_level'])
+				status_code = 404
+				backlight_level = request.json ['backlight_level']
+				if 0 <= backlight_level <= 255:
+					# valid backlight level request
+					raw_command = "sudo bash /home/pi/pi-notification-app/lightmonitor/scripts/backlight.sh $level".replace('$level', str(backlight_level))
+					args = shlex.split(raw_command)
+					try:
+						result = subprocess.check_output(args,stderr=subprocess.STDOUT)
+					except Exception as e:
+						logger.critical("Backlight set failed.  Return code: {} Error information: {}".format(e.returncode, e.output))
+						message = {
+							'status': 404,
+							'message': "Backlight set failed.  Return code: {} Error information: {}".format(e.returncode, e.output)
+						}
+					else:
+						if result == 0:
+							logger.info("Backlight successfully set to {}".format(backlight_level))
+							message = {
+								'status': 200,
+								'message': "Backlight successfully set to {}".format(backlight_level)
+							}
+							status_code = 200
+						else:
+							logger.critical("Backlight level set failed.  Return code: {}".format(result))
+							message = {
+								'status': 404,
+								'message': "Backlight level set failed.  Return code: {}".format(result)
+							}
+
 				else:
-					system_error_message = "stop bugging me!"
 					message = {
 						'status': 404,
-						'message': 'Backlight level set failed.  Information from system: {}'.format(system_error_message),
+						'message': 'Backlight level set failed.  Requested level was not between 0 and 255'
 					}
-					resp = jsonify(message)
-					resp.status_code = 404
-					return resp
 			else:
 				message = {
 					'status': 404,
-					'message': 'No backlight level request found in {}'.format(request.json),
-				}
-				resp = jsonify(message)
-				resp.status_code = 404
-				return resp
+					'message': 'No backlight level request found in {}'.format(request.json)
+					}
+			js = json.dumps(message)
+			resp = Response(js, status=status_code, mimetype='application/json')
+			resp.headers ['Link'] = 'http://evildad.com'
+			return resp
 
 
 	@app.route("/image", methods=['GET'])
 	def analyze_image():
 		# this is a request to analyze an image.  We need to figure out which and then analyze it.  There can be a request
-		# for a specific file or 'check' which means take a picture and then analyze it
+		# for a specific file or 'now' which means take a picture and then analyze it
 		requested_image = request.args.get('image', 'current')
 		camera_params = None
 		if requested_image == "now":
-			filename = 'check.jpg'
+			filename = 'now.jpg'
 			try:
 				camera_params = take_picture(filename)
 				image_to_analyze = os.path.join(ImageFolderPath, filename)
@@ -500,7 +511,9 @@ if __name__ == '__main__':
 	# set up logging
 	logger = set_up_logging(options)
 
-	logger.info('{2} app starting up,  filename: {0} modified {1}'.format(ScriptFilePath, time.ctime(
+	logger.info('{2} app starting up'.format(ScriptFilePath, time.ctime(
+		os.path.getmtime(ScriptFilePath)), App_Name))
+	logger.info('Scriptname: {0} modified {1}'.format(ScriptFilePath, time.ctime(
 		os.path.getmtime(ScriptFilePath)), App_Name))
 	logger.info('Options:{0}'.format(options))  # record the options as set
 	logger.info('logging level: {0} ({1})'.format(options.loglvl, logging.getLevelName(options.loglvl)))

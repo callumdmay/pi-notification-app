@@ -1,0 +1,79 @@
+#!/bin/sh
+
+
+if [ -z "$1" ]
+	then
+		echo "Usage: lightmonitor {start|stop|restart|status|follow|critical|errors|<search log string>}"
+		exit 1
+fi
+
+service="lightmonitor.service"
+log_file_collector='/log/lightmonitorR.lo*'
+
+case $1 in
+	start)
+		echo "Starting lightmonitor"
+		systemctl start $service
+		;;
+	stop)
+		echo "Stopping lightmonitor "
+		systemctl stop $service
+		;;
+	restart)
+		echo "Restarting lightmonitor "
+		systemctl restart $service
+		;;
+	status)
+		PID=$(ps -ef | grep '[l]ight_monitor.py' | grep '[p]ython' | nawk '{print $2}')
+		if [ -z "$PID" ]
+		then
+			echo 'lightmonitor is currently NOT running'
+		else
+			echo 'lightmonitor is currently running'
+		fi
+	    systemctl status $service
+		;;
+	follow)
+		echo "Track lightmonitor live"
+		PID=$(ps -ef | grep '[l]ight_monitor.py' | grep '[p]ython' | nawk '{print $2}')
+		if [ -z "$PID" ]
+		then
+			echo 'lightmonitor is currently NOT running - cannot track'
+		else
+			echo 'lightmonitor is currently running'
+			#systemd-journalctl -f _SYSTEMD_UNIT=$service
+			journalctl -f _SYSTEMD_UNIT=$service
+		fi
+		;;
+	errors)
+		echo "Recent lightmonitor error log entries"
+		PID=$(ps -ef | grep '[l]ight_monitor.py' | grep '[p]ython' | nawk '{print $2}')
+		if [ -z "$PID" ]
+		then
+			echo 'lightmonitor is currently NOT running'
+		else
+			echo 'lightmonitor is currently running'
+		fi
+		ccat $log_file_collector | grep '^201'  | grep -v INFO | grep -v DEBUG | sort > temp.log
+		tail temp.log -n 20
+		rm temp.log
+		;;
+	critical)
+		echo "CRITICAL lightmonitor error log entries"
+		PID=$(ps -ef | grep '[l]ight_monitor.py' | grep '[p]ython' | nawk '{print $2}')
+		if [ -z "$PID" ]
+		then
+			echo 'lightmonitor is currently NOT running'
+		else
+			echo 'lightmonitor is currently running'
+		fi
+		cat $log_file_collector | grep '^201'  | grep CRITICAL | sort
+		;;
+
+	*)
+		echo "$1 in coldsnap_log entries"
+		cat $log_file_collector | grep '^201' | grep "$1"| sort | less
+		;;
+esac
+
+exit 0
