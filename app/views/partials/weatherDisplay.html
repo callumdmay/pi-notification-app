@@ -13,7 +13,7 @@
                 <tr class="row">
                     <td class="col-md-2 text-center"></td>
                     <td class="col-md-2 text-center" ng-repeat="forecast in forecastWeatherData.forecast.simpleforecast.forecastday | limitTo: 5">
-                        {{forecast.conditions}}
+                        <i ng-class="'wi ' + getWeatherIcon(forecast.icon)"></i>
                     </td>
                 </tr>
                 <tr class="row">
