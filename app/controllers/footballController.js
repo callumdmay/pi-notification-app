@@ -1,8 +1,6 @@
 angular.module('notificationApp.footballController', []).
 controller('footballController', function($scope, $http, $timeout, UserConfig) {
 
-    $scope.currentTeam;
-
     $scope.rowClick = function(inputTeam) {
         $scope.currentTeam = inputTeam;
         $scope.getFixtures();
@@ -34,12 +32,15 @@ controller('footballController', function($scope, $http, $timeout, UserConfig) {
         $http({
             method: 'GET',
             url: $scope.currentTeam._links.team.href + '/fixtures',
-            //  url: 'http://api.football-data.org/v1/teams/81/fixtures',
             headers: {
                 'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
             }
         }).then(function(response) {
-            $scope.fixtureStatus = "Next match " + moment(response.data.fixtures[0].date).fromNow();
+          var count = 0;
+          while(moment((new Date()).getTime()).isAfter(response.data.fixtures[count].date))
+            count++;
+
+            $scope.fixtureStatus = "Next match " + moment(response.data.fixtures[count].date).fromNow();
         });
     };
 
