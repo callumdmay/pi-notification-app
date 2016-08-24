@@ -3,5 +3,6 @@ angular.module('notificationApp', [
     'notificationApp.weatherController',
     'notificationApp.footballController',
     'notificationApp.weatherFactory',
+    'notificationApp.footballFactory',
     'ngRoute'
 ]);

@@ -1,60 +1,38 @@
 angular.module('notificationApp.footballController', []).
-controller('footballController', function($scope, $http, $timeout, UserConfig) {
+controller('footballController', function($scope, $interval, footballFactory) {
+
+    $scope.currentTeam = footballFactory.getCurrentTeam();
 
     $scope.rowClick = function(inputTeam) {
         $scope.currentTeam = inputTeam;
-        $scope.getFixtures();
-    }
+        footballFactory.setCurrentTeam(inputTeam);
+        $scope.updateFixtures();
+    };
 
     $scope.selected = function(inputTeam) {
-        if ($scope.currentTeam == inputTeam)
-            return "bright";
-        else
-            return "";
-    }
+        return footballFactory.highlightTeam(inputTeam);
+    };
 
-    $scope.getLeagueTable = function() {
-        $http({
-            method: 'GET',
-            url: 'http://api.football-data.org//v1/competitions/399/leagueTable',
-            headers: {
-                'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
-            }
-        }).then(function(response) {
+    $scope.updateLeagueTable = function() {
+        footballFactory.getLeagueTable().then(function(response) {
             $scope.leagueTableData = response.data;
         });
     };
 
-    $scope.getFixtures = function() {
+    $scope.updateFixtures = function() {
         if (!$scope.currentTeam)
             return;
-
-        $http({
-            method: 'GET',
-            url: $scope.currentTeam._links.team.href + '/fixtures',
-            headers: {
-                'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
-            }
-        }).then(function(response) {
-          var count = 0;
-          while(moment((new Date()).getTime()).isAfter(response.data.fixtures[count].date))
-            count++;
-
-            $scope.fixtureStatus = "Next match " + moment(response.data.fixtures[count].date).fromNow();
+        footballFactory.getFixtures($scope.currentTeam).then(function(response) {
+            $scope.fixtureStatus = footballFactory.getNextFixtureString(response);
         });
     };
 
-    //Function loops to fetch new data based on timeout
-    $scope.intervalFunction = function() {
-        $scope.getFixtures();
-        $scope.getLeagueTable();
-        $timeout(function() {
-            $scope.intervalFunction();
-        }, 43200000)
-    };
-
-    // Kick off the interval
-    $scope.intervalFunction();
-
+    $scope.updateFixtures();
+    $scope.updateLeagueTable();
+    $interval(function() {
+        footballFactory.clearCache($scope.currentTeam);
+        $scope.updateFixtures();
+        $scope.updateLeagueTable();
+    }, 43200000);
 
 });
