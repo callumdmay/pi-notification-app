@@ -1,18 +1,25 @@
 angular.module('notificationApp.weatherFactory', []).
-factory('weatherFactory', function($http, UserConfig) {
+factory('weatherFactory', function($http, $cacheFactory, UserConfig) {
 
     return {
         getCurrentWeather: function() {
             return $http({
                 method: 'GET',
+                cache: true,
                 url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/conditions/q/' + UserConfig.country + '/' + UserConfig.city + '.json'
             });
         },
         getForecast: function() {
             return $http({
                 method: 'GET',
+                cache: true,
                 url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/forecast10day/q/' + UserConfig.country + '/' + UserConfig.city + '.json'
             });
+        },
+
+        clearCache: function() {
+            $cacheFactory.get('$http').remove('http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/conditions/q/' + UserConfig.country + '/' + UserConfig.city + '.json');
+            $cacheFactory.get('$http').remove('http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/forecast10day/q/' + UserConfig.country + '/' + UserConfig.city + '.json');
         },
 
         translateWeatherIcon: function(weatherString) {

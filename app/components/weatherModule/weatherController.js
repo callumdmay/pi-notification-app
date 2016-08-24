@@ -1,5 +1,5 @@
 angular.module('notificationApp.weatherController', []).
-controller('weatherController', function($scope, $http, $interval, UserConfig, weatherFactory) {
+controller('weatherController', function($scope, $interval, weatherFactory) {
 
     $scope.updateCurrentWeather = function() {
         weatherFactory.getCurrentWeather().then(function(response) {
@@ -16,6 +16,7 @@ controller('weatherController', function($scope, $http, $interval, UserConfig, w
     $scope.updateCurrentWeather();
     $scope.updateForecast();
     $interval(function() {
+        weatherFactory.clearCache();
         $scope.updateCurrentWeather();
         $scope.updateForecast();
     }, 1800000);
