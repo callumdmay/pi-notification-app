@@ -8,7 +8,7 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
             return $http({
                 method: 'GET',
                 cache: true,
-                url: 'http://api.football-data.org//v1/competitions/399/leagueTable',
+                url: 'http://api.football-data.org//v1/competitions/436/leagueTable',
                 headers: {
                     'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
                 }
@@ -28,7 +28,7 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
         },
 
         clearCache: function() {
-            $cacheFactory.get('$http').remove('http://api.football-data.org//v1/competitions/399/leagueTable');
+            $cacheFactory.get('$http').remove('http://api.football-data.org//v1/competitions/436/leagueTable');
             $cacheFactory.get('$http').remove(currentTeam._links.team.href + '/fixtures');
         },
 
@@ -41,7 +41,7 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
         },
 
         highlightTeam: function(inputTeam) {
-            if (currentTeam == inputTeam)
+            if (currentTeam.teamName == inputTeam.teamName)
                 return "bright";
             else
                 return "";

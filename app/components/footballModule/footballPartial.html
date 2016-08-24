@@ -2,11 +2,12 @@
     <div id="footballDiv1" ng-hide="!leagueTableData">
         <table id="footballTable" class="table table-condensed">
             <thead id="footballHeader">
-                <tr>
+                <tr style="text-center">
                     <th></th>
                     <th>Team</th>
-                    <th>Pts</th>
-                    <th>W</th>
+                    <th >Pts</th>
+                    <th >GD</th>
+                    <th >W</th>
                     <th>D</th>
                     <th>L</th>
                 </tr>
@@ -15,10 +16,11 @@
                 <tr ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team)" ng-class="selected(team)">
                     <th>{{team.position}}</th>
                     <th>{{team.teamName}}</th>
-                    <th class="thin">{{team.points}}</th>
-                    <th class="thin">{{team.wins}}</th>
-                    <th class="thin">{{team.draws}}</th>
-                    <th class="thin">{{team.losses}}</th>
+                    <th class="thin text-center">{{team.points}}</th>
+                    <th class="thin text-center">{{team.goalDifference}}</th>
+                    <th class="thin text-center">{{team.wins}}</th>
+                    <th class="thin text-center">{{team.draws}}</th>
+                    <th class="thin text-center">{{team.losses}}</th>
                 </tr>
             </tbody>
         </table>
