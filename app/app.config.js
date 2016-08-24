@@ -1,6 +1,11 @@
 angular.module('notificationApp')
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.
-	when("/", {templateUrl: "app/views/partials/home.html"}).
-  when("/weather", {templateUrl: "app/views/partials/weatherDisplay.html", controller: "weatherController"})
+    .config(['$routeProvider', function($routeProvider) {
+        $routeProvider.
+        when("/", {
+            templateUrl: "views/partials/home.html"
+        }).
+        when("/weather", {
+            templateUrl: "views/partials/weatherDisplay.html",
+            controller: "weatherController"
+        })
 }]);

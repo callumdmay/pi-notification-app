@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Notification Center</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="views/css/main.css">
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="views/css/clock_styles.css">
+    <link rel="stylesheet" type="text/css" href="views/css/weather_styles.css">
+    <link rel="stylesheet" type="text/css" href="views/css/football_styles.css">
+    <link rel="stylesheet" type="text/css" href="views/css/weather-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="views/font/roboto.css">
+    <script src="../node_modules/angular/angular.min.js"></script>
+    <script src="../node_modules/angular-route/angular-route.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div ng-view></div>
+    </div>
+
+    <script src="app.module.js"></script>
+    <script src="app.js"></script>
+    <script src="app.config.js"></script>
+    <script src="../node_modules/moment/min/moment.min.js"></script>
+    <script src="controllers/clockController.js"></script>
+    <script src="controllers/weatherController.js"></script>
+    <script src="controllers/footballController.js"></script>
+</body>
+
+</html>
