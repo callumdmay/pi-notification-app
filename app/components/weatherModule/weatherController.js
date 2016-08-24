@@ -1,63 +1,27 @@
 angular.module('notificationApp.weatherController', []).
-controller('weatherController', function($scope, $http, $timeout, UserConfig) {
+controller('weatherController', function($scope, $http, $interval, UserConfig, weatherFactory) {
 
-    $scope.currentCity = UserConfig.city;
-
-    $scope.getCurrentWeather = function() {
-        $http({
-            method: 'GET',
-            url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/conditions/q/' + UserConfig.country + '/' + UserConfig.city + '.json'
-        }).then(function(response) {
+    $scope.updateCurrentWeather = function() {
+        weatherFactory.getCurrentWeather().then(function(response) {
             $scope.currentWeatherData = response.data;
         });
     };
 
-    $scope.getForecast = function() {
-        $http({
-            method: 'GET',
-            url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/forecast10day/q/' + UserConfig.country + '/' + UserConfig.city + '.json'
-        }).then(function(response) {
+    $scope.updateForecast = function() {
+        weatherFactory.getForecast().then(function(response) {
             $scope.forecastWeatherData = response.data;
         });
     };
 
-    //Function loops to fetch new data based on timeout
-    $scope.intervalFunction = function() {
-        $scope.getCurrentWeather();
-        $scope.getForecast();
-        $timeout(function() {
-            $scope.intervalFunction();
-        }, 1800000)
-    };
-
-    // Kick off the interval
-    $scope.intervalFunction();
-
+    $scope.updateCurrentWeather();
+    $scope.updateForecast();
+    $interval(function() {
+        $scope.updateCurrentWeather();
+        $scope.updateForecast();
+    }, 1800000);
 
     $scope.getWeatherIcon = function(weatherString) {
-        switch (weatherString) {
-            case "chanceflurries":    return "wi-snow-wind";
-            case "chancerain":        return "wi-rain";
-            case "chancesleat":       return "wi-sleet";
-            case "chancesnow":        return "wi-snow";
-            case "chancestorms":      return "wi-thunderstorm";
-            case "clear":             return "wi-day-sunny";
-            case "cloudy":            return "wi-day-cloudy";
-            case "flurries":          return "wi-snow-wind";
-            case "hazy":              return "wi-day-haze";
-            case "mostlycloudy":      return "wi-day-cloudy";
-            case "mostlysunny":       return "wi-day-sunny";
-            case "partlycloudy":      return "wi-day-cloudy";
-            case "partlysunny":       return "wi-day-sunny";
-            case "rain":              return "wi-showers";
-            case "sleat":             return "wi-sleet";
-            case "snow":              return "wi-snow";
-            case "sunny":             return "wi-day-sunny";
-            case "tstorms":           return "wi-thunderstorm";
-
-            default:                  return "wi-na";
-        }
+        return weatherFactory.translateWeatherIcon(weatherString);
     }
-
 
 });

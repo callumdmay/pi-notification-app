@@ -1,0 +1,63 @@
+angular.module('notificationApp.weatherFactory', []).
+factory('weatherFactory', function($http, UserConfig) {
+
+    return {
+        getCurrentWeather: function() {
+            return $http({
+                method: 'GET',
+                url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/conditions/q/' + UserConfig.country + '/' + UserConfig.city + '.json'
+            });
+        },
+        getForecast: function() {
+            return $http({
+                method: 'GET',
+                url: 'http://api.wunderground.com/api/' + UserConfig.APIkeys.weatherAPIkey + '/forecast10day/q/' + UserConfig.country + '/' + UserConfig.city + '.json'
+            });
+        },
+
+        translateWeatherIcon: function(weatherString) {
+            switch (weatherString) {
+                case "chanceflurries":
+                    return "wi-snow-wind";
+                case "chancerain":
+                    return "wi-rain";
+                case "chancesleat":
+                    return "wi-sleet";
+                case "chancesnow":
+                    return "wi-snow";
+                case "chancestorms":
+                    return "wi-thunderstorm";
+                case "clear":
+                    return "wi-day-sunny";
+                case "cloudy":
+                    return "wi-day-cloudy";
+                case "flurries":
+                    return "wi-snow-wind";
+                case "hazy":
+                    return "wi-day-haze";
+                case "mostlycloudy":
+                    return "wi-day-cloudy";
+                case "mostlysunny":
+                    return "wi-day-sunny";
+                case "partlycloudy":
+                    return "wi-day-cloudy";
+                case "partlysunny":
+                    return "wi-day-sunny";
+                case "rain":
+                    return "wi-showers";
+                case "sleat":
+                    return "wi-sleet";
+                case "snow":
+                    return "wi-snow";
+                case "sunny":
+                    return "wi-day-sunny";
+                case "tstorms":
+                    return "wi-thunderstorm";
+
+                default:
+                    return "wi-na";
+            }
+        }
+    };
+
+});
