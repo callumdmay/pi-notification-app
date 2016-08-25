@@ -34,6 +34,8 @@ factory('weatherFactory', function($http, $cacheFactory, UserConfig) {
                     return "wi-snow";
                 case "chancestorms":
                     return "wi-thunderstorm";
+                case "chancetstorms":
+                    return "wi-thunderstorm";
                 case "clear":
                     return "wi-day-sunny";
                 case "cloudy":
