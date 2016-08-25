@@ -1,5 +1,5 @@
 <div class="col-sm-6" ng-controller="footballController">
-    <div id="footballDiv1" ng-hide="!leagueTableData">
+    <div id="footballDiv1" ng-hide="!leagueTableData" class="animated zoomIn">
         <table id="footballTable" class="table table-condensed">
             <thead id="footballHeader">
                 <tr style="text-center">
@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team)" ng-class="selected(team)">
+                <tr ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team)" ng-class="getCSSClass(team)">
                     <th>{{team.position}}</th>
                     <th>{{team.teamName}}</th>
                     <th class="thin text-center">{{team.points}}</th>

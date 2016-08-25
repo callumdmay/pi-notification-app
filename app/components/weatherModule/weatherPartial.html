@@ -1,6 +1,6 @@
 <a href="#/weather" class="link">
     <div class="col-sm-6 text-center" ng-controller="weatherController">
-        <div ng-hide="!currentWeatherData || !forecastWeatherData">
+        <div ng-hide="!currentWeatherData || !forecastWeatherData" class="animated zoomIn">
             <div class="row">
                 <span id="weatherCity">{{currentWeatherData.current_observation.display_location.city}}</span>
                 <span id="weatherTemperature">{{ currentWeatherData.current_observation.temp_c }}<sup id="weatherSymbol">&#8451</sup></span>

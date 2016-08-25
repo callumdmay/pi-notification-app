@@ -40,9 +40,11 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
             return currentTeam;
         },
 
-        highlightTeam: function(inputTeam) {
-            if (currentTeam.teamName == inputTeam.teamName)
-                return "bright";
+        getCSSClass: function(inputTeam, justClicked) {
+            if (currentTeam.teamName == inputTeam.teamName && justClicked)
+                return "bright animated rubberBand"
+            else if (currentTeam.teamName == inputTeam.teamName)
+                return "bright"
             else
                 return "";
         },

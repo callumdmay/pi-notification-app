@@ -1,5 +1,5 @@
 angular.module('notificationApp.weatherController', []).
-controller('weatherController', function($scope, $interval, weatherFactory) {
+controller('weatherController', function($scope, $interval, $timeout, $location, weatherFactory) {
 
     $scope.updateCurrentWeather = function() {
         weatherFactory.getCurrentWeather().then(function(response) {
@@ -24,5 +24,9 @@ controller('weatherController', function($scope, $interval, weatherFactory) {
     $scope.getWeatherIcon = function(weatherString) {
         return weatherFactory.translateWeatherIcon(weatherString);
     }
+
+    $timeout(function(){
+            $location.path('/');
+        },60000);
 
 });
