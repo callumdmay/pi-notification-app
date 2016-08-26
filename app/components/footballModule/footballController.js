@@ -5,14 +5,12 @@ controller('footballController', function($scope, $interval, $timeout, footballF
 
     $scope.rowClick = function(inputTeam) {
         $scope.currentTeam = inputTeam;
-        $scope.justClicked = true;
-        $timeout(function(){$scope.justClicked = false}, 1000);
         footballFactory.setCurrentTeam(inputTeam);
         $scope.updateFixtures();
     };
 
     $scope.getCSSClass = function(inputTeam){
-      return footballFactory.getCSSClass(inputTeam, $scope.justClicked);
+      return footballFactory.getCSSClass(inputTeam);
     }
 
     $scope.updateLeagueTable = function() {
