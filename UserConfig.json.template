@@ -1,8 +1,13 @@
 {
   "city": "",
   "country": "",
+  "address": {
+    "startingAddress": "",
+    "destinationAddress": ""
+  },
   "APIkeys": {
     "weatherAPIkey": "",
-    "footballAPIkey": ""
+    "footballAPIkey": "",
+    "googleMapsAPIkey": ""
   }
 }
