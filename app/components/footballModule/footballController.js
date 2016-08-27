@@ -30,7 +30,7 @@ controller('footballController', function($scope, $interval, $timeout, footballF
     $scope.updateFixtures();
     $scope.updateLeagueTable();
     $interval(function() {
-        footballFactory.clearCache($scope.currentTeam);
+        footballFactory.clearCache();
         $scope.updateFixtures();
         $scope.updateLeagueTable();
     }, 43200000);
