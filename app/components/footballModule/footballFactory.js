@@ -41,6 +41,8 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
         },
 
         getCSSClass: function(inputTeam) {
+            if (!currentTeam)
+                return;
             if (currentTeam.teamName == inputTeam.teamName)
                 return "bright"
             else
@@ -53,7 +55,7 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
                 count++;
 
             if (response.data.fixtures[count].status == "IN_PLAY")
-                  return "Playing now";
+                return "Playing now";
 
             return "Next match " + moment(response.data.fixtures[count].date).fromNow();
 
