@@ -49,8 +49,11 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
 
         getNextFixtureString: function(response) {
             var count = 0;
-            while (moment((new Date()).getTime()).isAfter(response.data.fixtures[count].date))
+            while (response.data.fixtures[count].status == "FINISHED")
                 count++;
+
+            if (response.data.fixtures[count].status == "IN_PLAY")
+                  return "Playing now";
 
             return "Next match " + moment(response.data.fixtures[count].date).fromNow();
 
