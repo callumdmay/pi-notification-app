@@ -3,7 +3,7 @@
         <div ng-hide="!currentWeatherData || !forecastWeatherData" class="animated zoomIn">
             <div class="row">
                 <span id="weatherCity">{{currentWeatherData.current_observation.display_location.city}}</span>
-                <span id="weatherTemperature">{{ currentWeatherData.current_observation.temp_c }}<sup id="weatherSymbol">&#8451</sup></span>
+                <span id="weatherTemperature">{{ currentWeatherData.current_observation.temp_c }}<i class="wi wi-degrees"></i></span>
             </div>
             <div class="row">
                 <div class="col-sm-12">
