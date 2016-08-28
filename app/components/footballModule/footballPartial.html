@@ -10,13 +10,13 @@
                     <th class="text-center">Pts</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team)" ng-class="getCSSClass(team)">
-                    <th>{{team.position}}</th>
-                    <th>{{team.teamName}}</th>
-                    <th class="thin text-center">{{team.playedGames}}</th>
-                    <th class="thin text-center">{{team.goalDifference}}</th>
-                    <th class="thin text-center">{{team.points}}</th>
+            <tbody id="footballTableBody">
+                <tr id="team{{$index}}" ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team, $index)" ng-class="getCSSClass(team)">
+                    <td>{{$index + 1}}</td>
+                    <td>{{team.teamName}}</td>
+                    <td class="thin text-center">{{team.playedGames}}</td>
+                    <td class="thin text-center">{{team.goalDifference}}</td>
+                    <td class="thin text-center">{{team.points}}</td>
                 </tr>
             </tbody>
         </table>

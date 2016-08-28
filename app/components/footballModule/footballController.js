@@ -1,22 +1,34 @@
 angular.module('notificationApp.footballController', []).
-controller('footballController', function($scope, $interval, $timeout, footballFactory) {
+controller('footballController', function($scope, $interval, $location, $anchorScroll, $timeout, footballFactory) {
 
     $scope.currentTeam = footballFactory.getCurrentTeam();
 
-    $scope.rowClick = function(inputTeam) {
+    $scope.rowClick = function(inputTeam, elementID) {
         $scope.currentTeam = inputTeam;
         footballFactory.setCurrentTeam(inputTeam);
+        $scope.scrollToTeam(elementID);
         $scope.updateFixtures();
     };
 
-    $scope.getCSSClass = function(inputTeam){
-      return footballFactory.getCSSClass(inputTeam);
+    $scope.getCSSClass = function(inputTeam) {
+        return footballFactory.getCSSClass(inputTeam);
     }
 
     $scope.updateLeagueTable = function() {
         footballFactory.getLeagueTable().then(function(response) {
             $scope.leagueTableData = response.data;
         });
+    };
+
+    $scope.scrollToTeam = function(elementID) {
+        var id = $location.hash();
+       if (elementID > 2)
+           $location.hash('team' + (elementID - 2));
+           else{
+              $location.hash(elementID );
+           }
+        $anchorScroll();
+        $location.hash(id);
     };
 
     $scope.updateFixtures = function() {
