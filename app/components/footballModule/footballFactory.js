@@ -57,7 +57,7 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
             if (response.data.fixtures[count].status == "IN_PLAY")
                 return "Playing now";
 
-            return "Next match " + moment(response.data.fixtures[count].date*1000).fromNow();
+            return "Next match " + moment(response.data.fixtures[count].date).fromNow();
 
         }
 
