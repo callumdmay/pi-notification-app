@@ -1,41 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html ng-strict-di>
 
 <head>
-
     <title>Notification Center</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="shared/css/main.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="components/clockModule/clock_styles.css">
-    <link rel="stylesheet" type="text/css" href="components/weatherModule/weather_styles.css">
-    <link rel="stylesheet" type="text/css" href="components/footballModule/football_styles.css">
-    <link rel="stylesheet" type="text/css" href="shared/css/weather-icons.min.css">
-    <link rel="stylesheet" type="text/css" href="shared/css/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="shared/font/roboto.css">
-    <script src="../node_modules/angular/angular.min.js"></script>
-    <script src="../node_modules/angular-route/angular-route.min.js"></script>
-
+    <link rel="stylesheet" type="text/css" href="../dist/styles.css">
+    <link rel="stylesheet" type="text/css" href="../dist/bootstrap.min.css">
+    <script src="../dist/angular.min.js"></script>
+    <script src="../dist/angular-route.min.js"></script>
+    <script src="../dist/moment.min.js"></script>
 </head>
 
 <body>
-
     <div class="container-fluid">
         <div ng-view></div>
     </div>
-
-    <script src="app.module.js"></script>
-    <script src="app.js"></script>
+    <script src="../dist/app.min.js"></script>
     <script src="app.config.js"></script>
-    <script src="../node_modules/moment/min/moment.min.js"></script>
-    <script src="components/clockModule/clockController.js"></script>
-    <script src="components/weatherModule/weatherController.js"></script>
-    <script src="components/weatherModule/weatherFactory.js"></script>
-    <script src="components/footballModule/footballController.js"></script>
-    <script src="components/footballModule/footballFactory.js"></script>
-    <script src="components/mapModule/mapController.js"></script>
-    <script src="components/mapModule/mapFactory.js"></script>
 </body>
 
 </html>

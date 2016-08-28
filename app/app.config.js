@@ -3,9 +3,10 @@ angular.module('notificationApp')
         $routeProvider.
         when("/", {
             templateUrl: "components/home.html"
-        }).
+        });
+        $routeProvider.
         when("/weather", {
             templateUrl: "components/weatherModule/weatherDisplay.html",
             controller: "weatherController"
-        })
-}]);
+        });
+    }]);
