@@ -2,11 +2,11 @@ angular.module('notificationApp')
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.
         when("/", {
-            templateUrl: "components/home.html"
+            templateUrl: "home.html"
         });
         $routeProvider.
         when("/weather", {
-            templateUrl: "components/weatherModule/weatherDisplay.html",
+            templateUrl: "weatherDisplay.html",
             controller: "weatherController"
         });
     }]);

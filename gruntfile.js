@@ -53,6 +53,13 @@ module.exports = function(grunt) {
               src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
               'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css'],
               dest: './dist/'
+            },
+            views: {
+              expand: true,
+              cwd: './app/',
+              src: ['**/*.html', 'app.config.js','main.js'],
+              flatten: true,
+              dest: './dist/'
             }
         },
 
