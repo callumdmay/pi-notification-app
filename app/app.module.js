@@ -6,5 +6,7 @@ angular.module('notificationApp', [
     'notificationApp.mapFactory',
     'notificationApp.weatherFactory',
     'notificationApp.footballFactory',
-    'ngRoute'
+    'ngRoute',
+    'fixed.table.header'
+
 ]);

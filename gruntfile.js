@@ -46,20 +46,21 @@ module.exports = function(grunt) {
                 src: ['**/*.eot', '**/*.svg', '**/*.ttf', '**/*.woff', '**/*.woff2'],
                 dest: './dist/'
             },
-            dependencies:{
-              expand: true,
-              cwd: './node_modules/',
-              flatten: true,
-              src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
-              'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css'],
-              dest: './dist/'
+            dependencies: {
+                expand: true,
+                cwd: './node_modules/',
+                flatten: true,
+                src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
+              'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css',
+              'angular-fixed-table-header/src/fixed-table-header.min.js'],
+                dest: './dist/'
             },
             views: {
-              expand: true,
-              cwd: './app/',
-              src: ['**/*.html', 'app.config.js','main.js'],
-              flatten: true,
-              dest: './dist/'
+                expand: true,
+                cwd: './app/',
+                src: ['**/*.html', 'app.config.js', 'main.js'],
+                flatten: true,
+                dest: './dist/'
             }
         },
 

@@ -8,10 +8,27 @@
 #footballDiv1 {
     margin-bottom: 0px;
     padding-bottom: 0px;
-    height: 190px !important;
+    max-height: 160px !important;
     overflow: auto;
 }
-
+#footballTableBody {
+    margin-top: 0px;
+    padding-top: 0px;
+}
+#footballTable {
+    margin-top: 0px;
+    padding-top: 0px;
+}
+table.clone thead tr:last-child th {
+    border-bottom: none;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+table.clone+ md-table-container table tbody tr:first-child td {
+    border-top: none;
+    margin-top: 0px;
+    padding-top: 0px;
+}
 ::-webkit-scrollbar {
     display: none;
 }
