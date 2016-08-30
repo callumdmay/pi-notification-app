@@ -5,7 +5,7 @@
 
 Interactive notification center designed to run on the 8 inch Raspberry Pi Touchscreen Display. Written in JavaScript using [AngularJS](https://angularjs.org/), [Electron](http://electron.atom.io/) and [Node.js](https://nodejs.org/en/).
 
-Currently displays date and time, weather (and weather forecast), the Spanish La Liga table (including displaying a team's next fixture). 
+Currently implemented modules are date and time, weather (and weather forecast), the Spanish La Liga table (with next match date display), and the next bus time of a chosen transit route. 
 
 Future features include integration with Apple's reminder/calender API and support for multiple European soccer leagues.
 
