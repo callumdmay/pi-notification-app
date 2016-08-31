@@ -3,6 +3,8 @@ factory('mapFactory', function($http, $cacheFactory, UserConfig) {
 
     return {
         getDirections: function() {
+            if (!UserConfig.APIkeys.googleMapsAPIkey)
+                return Promise.reject("No Google Maps API key");
             var startAddr = "origin=" + UserConfig.address.startingAddress.replace(" ", "+");
             var destAddr = "destination=" + UserConfig.address.destinationAddress.replace(" ", "+");
             return $http({
@@ -14,6 +16,8 @@ factory('mapFactory', function($http, $cacheFactory, UserConfig) {
         },
 
         getNextBus: function(inputData) {
+            if (!UserConfig.APIkeys.googleMapsAPIkey)
+                return Promise.reject("No Google Maps API key");
             var count = 0;
             while (inputData.data.routes[0].legs[0].steps[count].travel_mode != "TRANSIT")
                 count++;

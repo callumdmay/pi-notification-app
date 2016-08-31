@@ -11,7 +11,8 @@
     },
     "globals": {
       "angular": 1,
-      "moment": 1
+      "moment": 1,
+      "Promise": 1
     }
   },
   "scripts": {

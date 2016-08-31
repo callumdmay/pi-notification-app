@@ -3,6 +3,8 @@ factory('weatherFactory', function($http, $cacheFactory, UserConfig) {
 
     return {
         getCurrentWeather: function() {
+            if (!UserConfig.APIkeys.weatherAPIkey)
+                return Promise.reject("No Weather API key");
             return $http({
                 method: 'GET',
                 cache: true,
@@ -10,6 +12,8 @@ factory('weatherFactory', function($http, $cacheFactory, UserConfig) {
             });
         },
         getForecast: function() {
+            if (!UserConfig.APIkeys.weatherAPIkey)
+                return Promise.reject("No Weather API key");
             return $http({
                 method: 'GET',
                 cache: true,

@@ -5,6 +5,8 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
 
     return {
         getLeagueTable: function() {
+            if (!UserConfig.APIkeys.footballAPIkey)
+                return Promise.reject("No Football API key");
             return $http({
                 method: 'GET',
                 cache: true,
@@ -16,6 +18,8 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
         },
 
         getFixtures: function() {
+            if (!UserConfig.APIkeys.footballAPIkey)
+                return Promise.reject("No Football API key");
             return $http({
                 method: 'GET',
                 cache: true,
