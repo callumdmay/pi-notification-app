@@ -25,8 +25,9 @@ controller('weatherController', function($scope, $interval, $timeout, $location,
         return weatherFactory.translateWeatherIcon(weatherString);
     }
 
-    $timeout(function(){
+    $scope.startMainScreenTimeout = function() {
+        $timeout(function() {
             $location.path('/');
-        },60000);
-
+        }, 60000);
+    }
 });
