@@ -15,18 +15,20 @@ controller('footballController', function($scope, $interval, $location, $anchorS
     }
 
     $scope.updateLeagueTable = function() {
-        footballFactory.getLeagueTable().then(function(response) {
-            $scope.leagueTableData = response.data;
+        footballFactory.getLeagues().then(function(response) {
+            footballFactory.getLeagueTable(response).then(function(response) {
+                $scope.leagueTableData = response.data;
+            });
         });
     };
 
     $scope.scrollToTeam = function(elementID) {
         var id = $location.hash();
-       if (elementID > 2)
-           $location.hash('team' + (elementID - 2));
-           else{
-              $location.hash(elementID );
-           }
+        if (elementID > 2)
+            $location.hash('team' + (elementID - 2));
+        else {
+            $location.hash(elementID);
+        }
         $anchorScroll();
         $location.hash(id);
     };

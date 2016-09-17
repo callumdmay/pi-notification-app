@@ -5,6 +5,7 @@
     "startingAddress": "",
     "destinationAddress": ""
   },
+  "footballLeague": "",
   "APIkeys": {
     "weatherAPIkey": "",
     "footballAPIkey": "",

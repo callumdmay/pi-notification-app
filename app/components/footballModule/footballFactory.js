@@ -2,15 +2,37 @@ angular.module('notificationApp.footballFactory', []).
 factory('footballFactory', function($http, $cacheFactory, UserConfig) {
 
     var currentTeam;
-
+    var currentLeagueURL;
     return {
-        getLeagueTable: function() {
+
+        getLeagues: function() {
             if (!UserConfig.APIkeys.footballAPIkey)
                 return Promise.reject("No Football API key");
+
             return $http({
                 method: 'GET',
                 cache: true,
-                url: 'http://api.football-data.org//v1/competitions/436/leagueTable',
+                url: 'http://api.football-data.org/v1/competitions',
+                headers: {
+                    'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
+                }
+            });
+        },
+
+        getLeagueTable: function(response) {
+            if (!UserConfig.APIkeys.footballAPIkey)
+                return Promise.reject("No Football API key");
+
+            var count = 0;
+            while (response.data[count].league != UserConfig.footballLeague)
+                count++
+
+                currentLeagueURL = response.data[count]._links.leagueTable.href;
+
+            return $http({
+                method: 'GET',
+                cache: true,
+                url: currentLeagueURL + '',
                 headers: {
                     'X-Auth-Token': UserConfig.APIkeys.footballAPIkey
                 }
@@ -32,7 +54,7 @@ factory('footballFactory', function($http, $cacheFactory, UserConfig) {
         },
 
         clearCache: function() {
-            $cacheFactory.get('$http').remove('http://api.football-data.org//v1/competitions/436/leagueTable');
+            $cacheFactory.get('$http').remove(currentLeagueURL);
             $cacheFactory.get('$http').remove(currentTeam._links.team.href + '/fixtures');
         },
 
