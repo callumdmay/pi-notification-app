@@ -46,12 +46,13 @@ module.exports = function(grunt) {
                 src: ['**/*.eot', '**/*.svg', '**/*.ttf', '**/*.woff', '**/*.woff2'],
                 dest: './dist/'
             },
-            dependencies:{
+            node_modules:{
               expand: true,
               cwd: './node_modules/',
               flatten: true,
               src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
-              'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css'],
+              'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css',
+              'angular-ui-swiper/dist/angular-ui-swiper.js'],
               dest: './dist/'
             },
             views: {
