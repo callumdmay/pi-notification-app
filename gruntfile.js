@@ -76,9 +76,8 @@ module.exports = function(grunt) {
         },
 
         run: {
-            target: {
+            electron: {
                 exec: 'electron .'
-                    // args: ['.']
             }
         }
     });
@@ -94,5 +93,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-run');
 
     //register grunt default task
-    grunt.registerTask('default', ['clean', 'eslint', 'ngAnnotate', 'concat', 'copy', 'uglify', 'run']);
+    grunt.registerTask('default', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify', 'run:electron']);
+    grunt.registerTask('test', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
 }
