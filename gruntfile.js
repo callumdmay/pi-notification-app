@@ -40,6 +40,10 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            userConfig: {
+                src: ['UserConfig.json'],
+                dest: './dist/'
+            },
             font: {
                 expand: true,
                 cwd: './app/shared/font',
