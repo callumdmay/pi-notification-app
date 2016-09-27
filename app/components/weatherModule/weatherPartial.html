@@ -1,0 +1,17 @@
+<div class="col-sm-6 text-center" ng-controller="weatherController">
+    <a href="#/weather" class="link" ng-click="startMainScreenTimeout()">
+        <div ng-hide="!currentWeatherData || !forecastWeatherData" class="animated zoomIn">
+            <div class="row">
+                <span id="weatherCity">{{currentWeatherData.current_observation.display_location.city}} </span>
+                <span id="weatherTemperature">{{ currentWeatherData.current_observation.temp_c }}<i class="wi wi-degrees"></i></span>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="weatherCondition">Currently {{ currentWeatherData.current_observation.weather | lowercase }}</div>
+                    <div class="row">Today: {{forecastWeatherData.forecast.txt_forecast.forecastday[0].fcttext_metric}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>

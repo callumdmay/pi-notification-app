@@ -1,5 +1,5 @@
-<a href="#/" class="link">
-    <div class="row">
+<a href="#/" class="link" ng-hide="!forecastWeatherData">
+    <div class="row animated zoomIn">
         <table class="table table-condensed medium">
             <thead>
                 <tr class="row bright">
@@ -13,25 +13,25 @@
                 <tr class="row">
                     <td class="col-md-2 text-center"></td>
                     <td class="col-md-2 text-center" ng-repeat="forecast in forecastWeatherData.forecast.simpleforecast.forecastday | limitTo: 5">
-                        {{forecast.conditions}}
+                        <i ng-class="'wi ' + getWeatherIcon(forecast.icon)"></i>
                     </td>
                 </tr>
                 <tr class="row">
-                    <td class="col-md-2 text-center">High</td>
+                    <td class="col-md-2 text-center"><i class="wi wi-direction-up"></i></td>
                     <td class="col-md-2 text-center" ng-repeat="forecast in forecastWeatherData.forecast.simpleforecast.forecastday | limitTo: 5">
-                        {{forecast.high.celsius}}
+                        {{forecast.high.celsius}}<i class="wi wi-degrees"></i></td>
                     </td>
                 </tr>
                 <tr class="row">
-                    <td class="col-md-2 text-center">Low</td>
+                    <td class="col-md-2 text-center"><i class="wi wi-direction-down"></i></td>
                     <td class="col-md-2 text-center" ng-repeat="forecast in forecastWeatherData.forecast.simpleforecast.forecastday | limitTo: 5">
-                        {{forecast.low.celsius}}
+                        {{forecast.low.celsius}}<i class="wi wi-degrees"></i></td>
                     </td>
                 </tr>
                 <tr class="row">
-                    <td class="col-md-2 text-center">% Precip</td>
+                    <td class="col-md-2 text-center"><i class="wi wi-humidity"></i></td>
                     <td class="col-md-2 text-center" ng-repeat="forecast in forecastWeatherData.forecast.simpleforecast.forecastday | limitTo: 5">
-                        {{forecast.pop}}
+                        {{forecast.pop}}&#37
                     </td>
                 </tr>
             </tbody>

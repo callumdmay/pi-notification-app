@@ -5,13 +5,15 @@
     font-size: 20px;
     color: #fff;
 }
-#footballDiv1 {
+#footballDiv {
     margin-bottom: 0px;
     padding-bottom: 0px;
-    height: 190px !important;
-    overflow: auto;
+    height: 185px !important;
 }
-
+#footballTableDiv {
+    height: 160px;
+    overflow-y: auto;
+}
 ::-webkit-scrollbar {
     display: none;
 }
