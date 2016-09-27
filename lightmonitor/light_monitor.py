@@ -476,24 +476,8 @@ def build_parse_options():
 	# test related parameters
 	parser.add_option("-t", '--test', action="store_true", dest='TestMode', default=False,
 					  help='TestMode. A flag to enable the system can behave differently for test purposes')
-	parser.add_option("--loop", type="int", dest="loop", default=1,
-					  help="Repeat or loop the test this quantity (default = 1)")
-	parser.add_option("-d", "--delay", type="float", dest="delay", default=5,
-					  help="Delay between tests in minutes.  default = 5 minutes")
-	parser.add_option("-R", "--run_constantly", action='store_true', dest="run_constantly", default=False,
-					  help="Monitor constantly i.e. loop tests forever (default = False, only test for --loop loops")
 	parser.add_option('--noservice', action="store_false", dest='service', default=True,
 					  help='Run as an app, not service. Default = no, run as service')
-	parser.add_option('--systemconfig', action="store_true", dest='system_config', default=False,
-					  help='Use Coldsnap system configuration. Default = no, use command line parameters')
-
-	# test targets and options
-	parser.add_option("--ping-target", type="str", dest="ping_target", default="8.8.8.8",
-					  help="Network target to ping (default = 8.8.8.8 - google).  Try goaglo.com for a forced failure")
-	parser.add_option("--no-ping", action='store_false', dest="ping_enabled", default=True,
-					  help="do *NOT* ping (default = *DO* ping)")
-	parser.add_option("--no-modem", action='store_false', dest="modem_enabled", default=True,
-					  help="do *NOT* check the modem (default = *DO* check modem)")
 
 	(options, args) = parser.parse_args()
 
