@@ -45,7 +45,7 @@ if [ ! -d "venv" ]; then
 	# Install virtualenv
 	virtualenv -p /usr/bin/python2.7 $VENV_PATH
 fi
-${PIP_PATH} install PIL
+${PIP_PATH} install Pillow
 ${PIP_PATH} install flask
 ${PIP_PATH} install flask-restful
 ${PIP_PATH} install picamera
