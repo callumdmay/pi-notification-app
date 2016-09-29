@@ -1,4 +1,4 @@
-angular.module('notificationApp').
+angular.module('notificationApp.controllers').
 controller('mapController', function($scope, $interval, mapFactory) {
 
     $scope.updateNextBus = function(){
