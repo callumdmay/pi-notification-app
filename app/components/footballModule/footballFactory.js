@@ -1,4 +1,4 @@
-angular.module('notificationApp.footballFactory', []).
+angular.module('notificationApp').
 factory('footballFactory', function($http, $cacheFactory, UserConfig) {
 
     var currentTeam;

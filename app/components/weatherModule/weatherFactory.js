@@ -1,4 +1,4 @@
-angular.module('notificationApp.weatherFactory', []).
+angular.module('notificationApp').
 factory('weatherFactory', function($http, $cacheFactory, UserConfig) {
 
     return {

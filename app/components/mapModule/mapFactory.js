@@ -1,4 +1,4 @@
-angular.module('notificationApp.mapFactory', []).
+angular.module('notificationApp').
 factory('mapFactory', function($http, $cacheFactory, UserConfig) {
 
     return {

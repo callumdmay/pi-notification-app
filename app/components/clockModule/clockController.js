@@ -1,4 +1,4 @@
-angular.module('notificationApp.clockController', []).
+angular.module('notificationApp').
 controller('clockController', function($scope, $interval) {
     var tick = function() {
         $scope.clock = Date.now();

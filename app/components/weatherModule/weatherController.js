@@ -1,4 +1,4 @@
-angular.module('notificationApp.weatherController', []).
+angular.module('notificationApp').
 controller('weatherController', function($scope, $interval, $timeout, $location, weatherFactory) {
 
     $scope.updateCurrentWeather = function() {
