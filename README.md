@@ -12,4 +12,4 @@ Currently implemented modules are date and time, weather (and weather forecast),
 Future features include integration with Apple's reminder/calender API and support for multiple European soccer leagues.
 
 
-![](http://i.imgur.com/YP6n0EN.gif)
+![](http://i.imgur.com/RtjUXXG.gif)
