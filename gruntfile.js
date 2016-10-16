@@ -55,8 +55,7 @@ module.exports = function(grunt) {
               cwd: './node_modules/',
               flatten: true,
               src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
-              'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css',
-              'angular-ui-swiper/dist/angular-ui-swiper.js'],
+              'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css'],
               dest: './dist/'
             },
             views: {
