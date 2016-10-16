@@ -74,6 +74,17 @@ module.exports = function(grunt) {
             }
         },
 
+        browserSync: {
+            bsFiles: {
+                src: '*'
+            },
+            options: {
+                server: {
+                    baseDir: "./dist/"
+                }
+            }
+        },
+
         run: {
             electron: {
                 exec: 'electron .'
@@ -90,8 +101,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-run');
+    grunt.loadNpmTasks('grunt-browser-sync');
 
     //register grunt default task
     grunt.registerTask('default', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify', 'run:electron']);
-    grunt.registerTask('test', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
+    grunt.registerTask('test', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify', 'browserSync']);
+    grunt.registerTask('build', ['ngAnnotate', 'concat', 'copy', 'uglify']);
 }
