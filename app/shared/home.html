@@ -1,14 +1,6 @@
-<div class="container-fluid">
+<div class="container-fluid" ng-controller="appController">
+    <ng-include src="renderTemplate()"></ng-include>
     <div class="row">
-        <div class="col-sm-12">
-            <div class="row">
-                <ng-include src="'clockPartial.html'"></ng-include>
-                <ng-include src="'weatherPartial.html'"></ng-include>
-            </div>
-            <div class="row">
-                <ng-include src="'footballPartial.html'"></ng-include>
-                <ng-include src="'mapPartial.html'"></ng-include>
-            </div>
-        </div>
+        <ng-include src="'navigationBar.html'"></ng-include>
     </div>
 </div>
