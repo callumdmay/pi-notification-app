@@ -7,8 +7,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <div id="weatherCondition">Currently {{ currentWeatherData.current_observation.weather | lowercase }}</div>
-                    <div class="row">Today: {{forecastWeatherData.forecast.txt_forecast.forecastday[0].fcttext_metric}}
+                    <div id="weatherCondition" class="row">{{forecastWeatherData.forecast.txt_forecast.forecastday[0].fcttext_metric}}
                     </div>
                 </div>
             </div>
