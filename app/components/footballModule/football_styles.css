@@ -17,3 +17,7 @@
 ::-webkit-scrollbar {
     display: none;
 }
+
+.football-table-header .table-condensed{
+  margin-bottom: 0px;
+}

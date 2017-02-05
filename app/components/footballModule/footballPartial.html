@@ -1,29 +1,36 @@
 <div class="col-sm-6" ng-controller="footballController">
-    <div id="footballDiv" ng-hide="!leagueTableData" class="animated zoomIn">
-        <div class="row bright">
-            <div class="col-xs-1"></div>
-            <div class="col-xs-7">Team</div>
-            <div class="text-right col-xs-1">GP</div>
-            <div class="text-right col-xs-1">GD</div>
-            <div class="text-right col-xs-1">Pts</div>
-        </div>
-        <div id="footballTableDiv">
-            <table class="table table-condensed">
-                <tbody>
-                    <tr id="team{{$index}}" ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team, $index)" ng-class="getCSSClass(team)">
-                        <td class="col-xs-1">{{$index + 1}}</td>
-                        <td class="col-xs-7">{{team.teamName}}</td>
-                        <td class="col-xs-1">{{team.playedGames}}</td>
-                        <td class="col-xs-1">{{team.goalDifference}}</td>
-                        <td class="col-xs-1">{{team.points}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div id="footballNextGame" class="col-sm-12" ng-hide="!currentTeam">
-            <img src="{{currentTeam.crestURI}}" width="30" height="30">
-            {{fixtureStatus}}
-        </div>
+  <div id="footballDiv" ng-hide="!leagueTableData" class="animated zoomIn">
+    <div class="row bright">
+      <div class="football-table-header">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th class="col-xs-1"></th>
+              <th class="col-xs-7 col-xs-offset-1">Team</th>
+              <th class="col-xs-1">GP</th>
+              <th class="col-xs-1">GD</th>
+              <th class="col-xs-1">Pts</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </div>
+    <div id="footballTableDiv" class="row">
+      <table class="table table-condensed">
+        <tbody>
+          <tr id="team{{$index}}" ng-repeat="team in leagueTableData.standing" ng-click="rowClick(team, $index)" ng-class="getCSSClass(team)">
+            <td class="col-xs-1">{{$index + 1}}</td>
+            <td class="col-xs-7">{{team.teamName}}</td>
+            <td class="col-xs-1">{{team.playedGames}}</td>
+            <td class="col-xs-1">{{team.goalDifference}}</td>
+            <td class="col-xs-1">{{team.points}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="footballNextGame" class="col-sm-12" ng-hide="!currentTeam">
+      <img src="{{currentTeam.crestURI}}" width="30" height="30"> {{fixtureStatus}}
+    </div>
+  </div>
 </div>
