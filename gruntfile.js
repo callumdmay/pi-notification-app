@@ -26,6 +26,7 @@ module.exports = function(grunt) {
                 }]
             }
         },
+
         concat: {
             js: {
                 src: './build/js/*.js',
@@ -35,8 +36,15 @@ module.exports = function(grunt) {
 
             css: {
                 src: './app/**/*.css',
-                dest: './dist/styles.css'
+                dest: './dist/main.css'
+            },
+
+            vendor_css: {
+              src: ['./node_modules/bootstrap/dist/css/bootstrap.min.css', './node_modules/animate.css/animate.min.css' ],
+              flatten: true,
+              dest: './dist/vendor.css'
             }
+
         },
 
         copy: {
@@ -55,7 +63,8 @@ module.exports = function(grunt) {
                 cwd: './node_modules/',
                 flatten: true,
                 src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
-                    'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css'
+                    'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css',
+                    'animate.css/animate.min.css'
                 ],
                 dest: './dist/'
             },
@@ -82,20 +91,32 @@ module.exports = function(grunt) {
         },
 
         browserSync: {
-            distFolder: {
-                src: '**/**'
-            },
-            options: {
-                server: {
-                    baseDir: "./dist/"
+          bsFiles: {
+            src : 'dist/'
+          },
+          options: {
+              server: {
+                  baseDir: "./dist"
                 }
-            }
+   }
         },
 
         run: {
             electron: {
                 exec: 'electron .'
             }
+        },
+
+        watch: {
+          js : {
+            files: "app/components/**/*.js",
+            tasks: ["ngAnnotate", "concat:js", "uglify"]
+          },
+          css: {
+            files: ["app/**/*.css"],
+            tasks: ["concat:css"]
+          }
+
         }
     });
 
@@ -107,12 +128,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks('grunt-run');
     grunt.loadNpmTasks('grunt-browser-sync');
 
     //register grunt default task
-    grunt.registerTask('default', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify', 'run:electron']);
-    grunt.registerTask('develop', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify', 'browserSync']);
+    grunt.registerTask('default', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
+    grunt.registerTask('start', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify', 'run:electron']);
+    grunt.registerTask('dev', ['default', 'browserSync', 'watch']);
     grunt.registerTask('test', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
     grunt.registerTask('build', ['ngAnnotate', 'concat', 'copy', 'uglify']);
 }
