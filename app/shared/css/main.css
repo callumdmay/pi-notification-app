@@ -35,37 +35,21 @@ body {
     /* These two lines are counted as one :-)       */
 }
 
-.btn-outline {
-  color: white !important;
-  background: none;
-  padding: 12px 22px;
-  text-decoration: none;
-  outline: none !important;
-  cursor: none;
+.footer button{
+  color: white;
+  background-color: transparent;
+  font-size: 2em;
+  outline: 0px;
 }
-.btn-outline:active {
-  color: inherit;
-  background-color: inherit;
-  text-decoration: none;
-  border: none;
+
+.footer .nav-button:hover,
+.footer .nav-button:active,
+.footer .nav-button:focus {
+  color: white;
   cursor: none;
-  outline: none !important;
-}
-.btn-outline:hover {
-  color: inherit;
-  background-color: inherit;
-  text-decoration: none;
   border: none;
-  cursor: none;
-  outline: none !important;
-}
-.btn-outline:focus{
-  color: inherit;
-  background-color: inherit;
   text-decoration: none;
-  border: none;
-  cursor: none;
-  outline: none !important;
+  outline: none;
 }
 
 .dimmed {
