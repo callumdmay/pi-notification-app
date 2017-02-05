@@ -1,141 +1,132 @@
 module.exports = function(grunt) {
-    //grunt wrapper function
-    grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+  //grunt wrapper function
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
 
-        clean: {
-            clean: ['./build/*', './dist/*']
-        },
+    clean: {
+      clean: ['./build/*', './dist/*']
+    },
 
-        eslint: {
-            target: ['./app/*.js']
-        },
+    eslint: {
+      target: ['./app/*.js']
+    },
 
-        ngAnnotate: {
-            options: {
-                singleQuotes: true
-            },
-            app: {
+    ngAnnotate: {
+      options: {
+        singleQuotes: true
+      },
+      app: {
 
-                files: [{
-                    expand: true,
-                    src: ['app/**/*.js', '!app/main.js', '!app/app.config.js'],
-                    flatten: true,
-                    dest: './build/js/',
-                    extDot: 'last'
-                }]
-            }
-        },
+        files: [{
+          expand: true,
+          src: ['app/**/*.js', '!app/main.js', '!app/app.config.js'],
+          flatten: true,
+          dest: './build/js/',
+          extDot: 'last'
+        }]
+      }
+    },
 
-        concat: {
-            js: {
-                src: './build/js/*.js',
-                flatten: true,
-                dest: './build/app.js'
-            },
+    concat: {
+      js: {
+        src: './build/js/*.js',
+        flatten: true,
+        dest: './build/app.js'
+      },
 
-            css: {
-                src: './app/**/*.css',
-                dest: './dist/main.css'
-            },
+      css: {
+        src: './app/**/*.css',
+        dest: './dist/main.css'
+      },
 
-            vendor_css: {
-              src: ['./node_modules/bootstrap/dist/css/bootstrap.min.css', './node_modules/animate.css/animate.min.css' ],
-              flatten: true,
-              dest: './dist/vendor.css'
-            }
+      vendor_css: {
+        src: ['./node_modules/bootstrap/dist/css/bootstrap.min.css', './node_modules/animate.css/animate.min.css'],
+        flatten: true,
+        dest: './dist/vendor.css'
+      }
 
-        },
+    },
 
-        copy: {
-            userConfig: {
-                src: ['UserConfig.json'],
-                dest: './dist/'
-            },
-            font: {
-                expand: true,
-                cwd: './app/shared/font',
-                src: ['**/*.eot', '**/*.svg', '**/*.ttf', '**/*.woff', '**/*.woff2'],
-                dest: './dist/'
-            },
-            node_modules: {
-                expand: true,
-                cwd: './node_modules/',
-                flatten: true,
-                src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
-                    'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css',
-                    'animate.css/animate.min.css'
-                ],
-                dest: './dist/'
-            },
-            font_awesome: {
-                expand: true,
-                cwd: './node_modules/font-awesome',
-                src: ['css/**', 'fonts/**'],
-                dest: './dist/'
-            },
-            views: {
-                expand: true,
-                cwd: './app/',
-                src: ['**/*.html', 'app.config.js', 'main.js'],
-                flatten: true,
-                dest: './dist/'
-            }
-        },
+    copy: {
+      userConfig: {
+        src: ['UserConfig.json'],
+        dest: './dist/'
+      },
+      font: {
+        expand: true,
+        cwd: './app/shared/font',
+        src: ['**/*.eot', '**/*.svg', '**/*.ttf', '**/*.woff', '**/*.woff2'],
+        dest: './dist/'
+      },
+      node_modules: {
+        expand: true,
+        cwd: './node_modules/',
+        flatten: true,
+        src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
+          'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css',
+          'animate.css/animate.min.css'
+        ],
+        dest: './dist/'
+      },
+      font_awesome: {
+        expand: true,
+        cwd: './node_modules/font-awesome',
+        src: ['css/**', 'fonts/**'],
+        dest: './dist/'
+      },
+      views: {
+        expand: true,
+        cwd: './app/',
+        src: ['**/*.html', 'app.config.js', 'main.js'],
+        flatten: true,
+        dest: './dist/'
+      }
+    },
 
-        uglify: {
-            js: { //target
-                src: ['./build/app.js'],
-                dest: './dist/app.min.js'
-            }
-        },
+    uglify: {
+      js: { //target
+        src: ['./build/app.js'],
+        dest: './dist/app.min.js'
+      }
+    },
 
-        browserSync: {
-          bsFiles: {
-            src : 'dist/'
-          },
-          options: {
-              server: {
-                  baseDir: "./dist"
-                }
-   }
-        },
+    run: {
+      electron: {
+        exec: 'electron .'
+      }
+    },
 
-        run: {
-            electron: {
-                exec: 'electron .'
-            }
-        },
+    watch: {
+      js: {
+        files: "app/components/**/*.js",
+        tasks: ["ngAnnotate", "concat:js", "uglify"]
+      },
+      css: {
+        files: ["app/**/*.css"],
+        tasks: ["concat:css"]
+      },
+      html: {
+        files: ['**/*.html', 'app.config.js', 'main.js'],
+        tasks: ["copy:views"]
+      }
 
-        watch: {
-          js : {
-            files: "app/components/**/*.js",
-            tasks: ["ngAnnotate", "concat:js", "uglify"]
-          },
-          css: {
-            files: ["app/**/*.css"],
-            tasks: ["concat:css"]
-          }
-
-        }
-    });
+    }
+  });
 
 
-    //load grunt tasks
-    grunt.loadNpmTasks('grunt-eslint');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-ng-annotate');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks('grunt-run');
-    grunt.loadNpmTasks('grunt-browser-sync');
+  //load grunt tasks
+  grunt.loadNpmTasks('grunt-eslint');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-ng-annotate');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks("grunt-contrib-watch");
+  grunt.loadNpmTasks('grunt-run');
 
-    //register grunt default task
-    grunt.registerTask('default', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
-    grunt.registerTask('start', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify', 'run:electron']);
-    grunt.registerTask('dev', ['default', 'browserSync', 'watch']);
-    grunt.registerTask('test', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
-    grunt.registerTask('build', ['ngAnnotate', 'concat', 'copy', 'uglify']);
+  //register grunt default task
+  grunt.registerTask('default', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
+  grunt.registerTask('dev', ['default', 'watch']);
+  grunt.registerTask('test', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
+  grunt.registerTask('build', ['ngAnnotate', 'concat', 'copy', 'uglify']);
 }
