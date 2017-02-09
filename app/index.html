@@ -2,19 +2,21 @@
 <html ng-strict-di>
 
 <head>
-    <title>Notification Center</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="vendor.css">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="main.css">
+  <title>Notification Center</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="vendor.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="main.css">
 
-    <script src="vendor.min.js"></script>
+  <script src="vendor.min.js"></script>
 </head>
 
 <body>
+  <div id="electron-app">
     <div ng-view></div>
-    <script src="app.min.js"></script>
+  </div>
+  <script src="app.min.js"></script>
 </body>
 
 </html>

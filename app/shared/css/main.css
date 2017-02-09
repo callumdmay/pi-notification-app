@@ -7,6 +7,25 @@ body {
     margin: 0;
 
 }
+.raspberry-pi-touchscreen-dev {
+  width: 800px;
+  height: 480px;
+  border-width: 10px;
+  margin: 10px auto;
+  border: dashed;
+  cursor: default;
+  border-color: white;
+  position: relative;
+}
+
+.raspberry-pi-touchscreen-dev .navbar-fixed-bottom {
+  position: absolute;
+}
+
+.raspberry-pi-touchscreen-dev .footer .nav-button:hover {
+  cursor: default;
+}
+
 .link {
     color: inherit;
     background-color: inherit;

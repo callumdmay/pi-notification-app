@@ -4,8 +4,6 @@ const app = electron.app
     // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
 function createWindow() {
@@ -18,30 +16,30 @@ function createWindow() {
       show: false,
       autoHideMenuBar: true,
       darkTheme: true,
-      fullscreen: true,
       frame: false,
       resizable: false
     })
   }
 
   if (dev_mode) {
-    mainWindow = new BrowserWindow({
-      
-    })
+    mainWindow = new BrowserWindow();
+    mainWindow.webContents.openDevTools();
+    mainWindow.maximize();
   }
     // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
 
-    //mainWindow.webContents.openDevTools()
-
   mainWindow.once("ready-to-show", () => {
-    mainWindow.show()
+    mainWindow.show();
+  })
+
+  mainWindow.webContents.on("did-finish-load", function() {
+    if (dev_mode){
+      mainWindow.webContents.executeJavaScript("document.getElementById('electron-app').className += 'raspberry-pi-touchscreen-dev'");
+    }
   })
         // Emitted when the window is closed.
   mainWindow.on("closed", function() {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
     mainWindow = null
   })
 }
