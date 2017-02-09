@@ -1,9 +1,9 @@
 html {
-    cursor: none !important;
+    cursor: none;
 }
 body {
-    background: #000 !important;
-    color: #aaa !important;
+    background: #000;
+    color: #aaa;
     margin: 0;
 
 }
@@ -38,6 +38,8 @@ body {
 .footer button{
   color: white;
   background-color: transparent;
+  border: none;
+  margin: 10px;
   font-size: 2em;
   outline: 0px;
 }
