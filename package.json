@@ -3,18 +3,6 @@
   "version": "1.0.0",
   "description": "A Notification Center for the Raspberry Pi",
   "main": "./dist/main.js",
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "browser": true,
-      "node": true
-    },
-    "globals": {
-      "angular": 1,
-      "moment": 1,
-      "Promise": 1
-    }
-  },
   "scripts": {
     "start": "electron .",
     "test": "grunt test",

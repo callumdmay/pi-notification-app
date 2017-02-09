@@ -100,6 +100,13 @@ module.exports = function(grunt) {
     },
 
     watch: {
+      grunt: {
+        files: "gruntfile.js",
+        options: {
+          reload:true
+        }
+      },
+      
       angular: {
         files: ["app/**/*.js", "!app/main.js"],
         tasks: ["ngAnnotate", "uglify"]
