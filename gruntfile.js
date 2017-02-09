@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     },
 
     eslint: {
-      target: ['./app/*.js']
+      target: ['./app/**/*.js']
     },
 
     ngAnnotate: {
@@ -114,7 +114,7 @@ module.exports = function(grunt) {
 
       html: {
         files: ['**/*.html', 'app.config.js', 'main.js'],
-        tasks: ["copy:views"]
+        tasks: ["copy:html"]
       }
 
     }
