@@ -1,5 +1,5 @@
 angular.module("notificationApp.controllers").
-controller("footballController", function($scope, $interval, $location, $anchorScroll, $timeout, footballFactory) {
+controller("FootballController", function($scope, $interval, $location, $anchorScroll, $timeout, footballFactory) {
 
   $scope.currentTeam = footballFactory.getCurrentTeam();
 

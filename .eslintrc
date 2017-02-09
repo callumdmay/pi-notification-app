@@ -11,7 +11,8 @@
   "rules": {
     "quotes": ["error", "double"],
     "keyword-spacing": 2,
-    "indent": ["error", 2]
+    "indent": ["error", 2],
+    "angular/controller-as": 0
   },
   "globals": {
     "angular": 1,

@@ -1,5 +1,5 @@
 angular.module("notificationApp.controllers").
-controller("navigationController", function($scope, $rootScope) {
+controller("NavigationController", function($scope, $rootScope) {
 
   $scope.numberOfPages = 2;
 

@@ -1,5 +1,5 @@
 angular.module("notificationApp.controllers").
-controller("mapController", function($scope, $interval, mapFactory) {
+controller("MapController", function($scope, $interval, mapFactory) {
 
   $scope.updateNextBus = function(){
     mapFactory.getDirections().then(function(response){

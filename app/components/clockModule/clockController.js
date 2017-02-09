@@ -1,5 +1,5 @@
 angular.module("notificationApp.controllers").
-controller("clockController", function($scope, $interval) {
+controller("ClockController", function($scope, $interval) {
   var tick = function() {
     $scope.clock = Date.now();
   }

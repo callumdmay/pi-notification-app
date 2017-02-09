@@ -1,5 +1,5 @@
 angular.module("notificationApp.controllers").
-controller("appController", function($scope, $rootScope) {
+controller("AppController", function($scope, $rootScope) {
 
   $rootScope.currentPageIndex = 1;
 
