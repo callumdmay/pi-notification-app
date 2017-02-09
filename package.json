@@ -19,7 +19,8 @@
     "start": "electron .",
     "test": "grunt test",
     "build": "grunt",
-    "dev": "grunt dev"
+    "dev:build": "grunt dev",
+    "dev:start": "electron . -dev"
   },
   "repository": {
     "type": "git",

@@ -132,8 +132,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-run');
 
   //register grunt default task
-  grunt.registerTask('default', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
+  grunt.registerTask('default', ['clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
   grunt.registerTask('dev', ['default', 'watch']);
-  grunt.registerTask('test', ['eslint', 'clean', 'ngAnnotate', 'concat', 'copy', 'uglify']);
+  grunt.registerTask('test', ['eslint']);
   grunt.registerTask('build', ['ngAnnotate', 'concat', 'copy', 'uglify']);
 }

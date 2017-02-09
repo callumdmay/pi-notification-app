@@ -1,0 +1,18 @@
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+    },
+  "rules": {
+    "quotes": ["error", "double"],
+    "keyword-spacing": 2,
+    "indent": ["error", 2]
+  },
+  "globals": {
+    "angular": 1,
+    "moment": 1
+  }
+
+}
