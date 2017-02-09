@@ -12,28 +12,16 @@ module.exports = function(grunt) {
     },
 
     ngAnnotate: {
-      options: {
-        singleQuotes: true
-      },
       app: {
-
         files: [{
-          expand: true,
-          src: ['app/**/*.js', '!app/main.js', '!app/app.config.js'],
+          src: ['app/app.module.js', 'app/app/config.js', 'app/**/*.js', '!app/main.js'],
           flatten: true,
-          dest: './build/js/',
-          extDot: 'last'
+          dest: './dist/build/app.js',
         }]
       }
     },
 
     concat: {
-      js: {
-        src: './build/js/*.js',
-        flatten: true,
-        dest: './build/app.js'
-      },
-
       css: {
         src: './app/**/*.css',
         dest: './dist/main.css'
@@ -43,7 +31,14 @@ module.exports = function(grunt) {
         src: ['./node_modules/bootstrap/dist/css/bootstrap.min.css', './node_modules/animate.css/animate.min.css'],
         flatten: true,
         dest: './dist/vendor.css'
-      }
+      },
+
+      vendor_js: {
+        flatten: true,
+        src: ['./node_modules/angular/angular.min.js', './node_modules/angular-route/angular-route.min.js',
+          './node_modules/moment/min/moment.min.js'],
+        dest: './dist/vendor.min.js'
+      },
 
     },
 
@@ -52,40 +47,45 @@ module.exports = function(grunt) {
         src: ['UserConfig.json'],
         dest: './dist/'
       },
+
       font: {
         expand: true,
         cwd: './app/shared/font',
         src: ['**/*.eot', '**/*.svg', '**/*.ttf', '**/*.woff', '**/*.woff2'],
         dest: './dist/'
       },
-      node_modules: {
-        expand: true,
-        cwd: './node_modules/',
-        flatten: true,
-        src: ['angular/angular.min.js', 'angular-route/angular-route.min.js',
-          'moment/min/moment.min.js', 'bootstrap/dist/css/bootstrap.min.css',
-          'animate.css/animate.min.css'
-        ],
-        dest: './dist/'
-      },
+
       font_awesome: {
         expand: true,
         cwd: './node_modules/font-awesome',
         src: ['css/**', 'fonts/**'],
         dest: './dist/'
       },
-      views: {
+
+      html: {
         expand: true,
         cwd: './app/',
-        src: ['**/*.html', 'app.config.js', 'main.js'],
+        src: ['**/*.html'],
         flatten: true,
         dest: './dist/'
+      },
+
+      electron: {
+        expand: true,
+        src: ["app/main.js"],
+        flatten: true,
+        dest: './dist/'
+
       }
     },
 
     uglify: {
+      options: {
+          sourceMap: true
+      },
+
       js: { //target
-        src: ['./build/app.js'],
+        src: ['./dist/build/app.js'],
         dest: './dist/app.min.js'
       }
     },
@@ -97,14 +97,21 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      js: {
-        files: "app/components/**/*.js",
-        tasks: ["ngAnnotate", "concat:js", "uglify"]
+      angular: {
+        files: ["app/**/*.js", "!app/main.js"],
+        tasks: ["ngAnnotate", "uglify"]
       },
+
+      js: {
+        files: ["app/main.js"],
+        tasks: ["copy:electron"]
+      },
+
       css: {
         files: ["app/**/*.css"],
         tasks: ["concat:css"]
       },
+
       html: {
         files: ['**/*.html', 'app.config.js', 'main.js'],
         tasks: ["copy:views"]
