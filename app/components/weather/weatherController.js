@@ -1,5 +1,5 @@
 angular.module("notificationApp.controllers").
-controller("WeatherController", function($scope, $interval, $timeout, $location, weatherFactory) {
+controller("WeatherController", function($scope, $interval, $timeout, $location, weatherFactory, UserConfig) {
 
   $scope.queryCount = 0;
   $scope.updateCurrentWeather = function() {
@@ -16,13 +16,15 @@ controller("WeatherController", function($scope, $interval, $timeout, $location,
     });
   };
 
-  $scope.updateCurrentWeather();
-  $scope.updateForecast();
-  $interval(function() {
-    weatherFactory.clearCache();
+  if (UserConfig.APIkeys.weatherAPIkey) {
     $scope.updateCurrentWeather();
     $scope.updateForecast();
-  }, 1800000);
+    $interval(function() {
+      weatherFactory.clearCache();
+      $scope.updateCurrentWeather();
+      $scope.updateForecast();
+    }, 1800000);
+  }
 
   $scope.getWeatherIcon = function(weatherString) {
     return weatherFactory.translateWeatherIcon(weatherString);

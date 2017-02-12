@@ -6,9 +6,6 @@ factory("footballFactory", function($http, $cacheFactory, UserConfig) {
   return {
 
     getLeagues: function() {
-      if (!UserConfig.APIkeys.footballAPIkey)
-        return Promise.reject("No Football API key");
-
       return $http({
         method: "GET",
         cache: true,
@@ -20,9 +17,6 @@ factory("footballFactory", function($http, $cacheFactory, UserConfig) {
     },
 
     getLeagueTable: function(response) {
-      if (!UserConfig.APIkeys.footballAPIkey)
-        return Promise.reject("No Football API key");
-
       var count = 0;
       while (response.data[count].league != UserConfig.footballLeague)
         count++
@@ -40,8 +34,6 @@ factory("footballFactory", function($http, $cacheFactory, UserConfig) {
     },
 
     getFixtures: function() {
-      if (!UserConfig.APIkeys.footballAPIkey)
-        return Promise.reject("No Football API key");
       return $http({
         method: "GET",
         cache: true,

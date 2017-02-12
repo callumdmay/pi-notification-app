@@ -1,5 +1,5 @@
 angular.module("notificationApp.controllers").
-controller("FootballController", function($scope, $interval, $location, $anchorScroll, $timeout, footballFactory) {
+controller("FootballController", function($scope, $interval, $location, $anchorScroll, $timeout, footballFactory, UserConfig) {
 
   $scope.currentTeam = footballFactory.getCurrentTeam();
 
@@ -41,12 +41,14 @@ controller("FootballController", function($scope, $interval, $location, $anchorS
     });
   };
 
-  $scope.updateFixtures();
-  $scope.updateLeagueTable();
-  $interval(function() {
-    footballFactory.clearCache();
+  if (UserConfig.APIkeys.footballAPIkey) {
     $scope.updateFixtures();
     $scope.updateLeagueTable();
-  }, 43200000);
+    $interval(function() {
+      footballFactory.clearCache();
+      $scope.updateFixtures();
+      $scope.updateLeagueTable();
+    }, 43200000);
+  }
 
 });

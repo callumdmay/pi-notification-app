@@ -1,5 +1,5 @@
 angular.module("notificationApp.controllers").
-controller("MapController", function($scope, $interval, mapFactory) {
+controller("MapController", function($scope, $interval, mapFactory, UserConfig) {
 
   $scope.updateNextBus = function(){
     mapFactory.getDirections().then(function(response){
@@ -7,10 +7,11 @@ controller("MapController", function($scope, $interval, mapFactory) {
     })
   }
 
-  $scope.updateNextBus();
-  $interval(function() {
-    mapFactory.clearCache();
+  if (UserConfig.APIkeys.googleMapsAPIkey) {
     $scope.updateNextBus();
-  }, 300000);
-
+    $interval(function() {
+      mapFactory.clearCache();
+      $scope.updateNextBus();
+    }, 300000);
+  }
 });
