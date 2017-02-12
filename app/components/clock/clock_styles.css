@@ -1,4 +1,4 @@
-#clockNumbers {
+  #clockNumbers {
   font-family: Roboto, sans-serif;
   font-size: 80px;
   line-height: 80%;
@@ -6,7 +6,7 @@
 
 #clockPeriod {
   color: #FFF;
-  font-size: 45px;
+  font-size: 42px;
   line-height: 80%;
 }
 
